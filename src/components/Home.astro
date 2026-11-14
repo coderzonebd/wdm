@@ -1,78 +1,91 @@
 ---
 // SPDX-License-Identifier: GPL-3.0-or-later
 import Base from "../layouts/Base.astro";
+import Chart from "./Chart.astro";
+import KillGrid from "./KillGrid.astro";
 import { href, REPO, strings, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = strings[lang];
 const h = t.home;
+const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
+const shot = (scheme: "light" | "dark", x: 1 | 2) => `${base}shots/app-${lang}-${scheme}${x === 1 ? "-1x" : ""}.webp`;
 ---
 <Base lang={lang} page="home">
-  <section class="hero">
-    <div class="wrap">
+  <section class="hero wrap">
+    <h1 class="display">{h.title}</h1>
+    <div class="hero-sub">
+      <p class="lead">{h.lead}</p>
+      <div class="actions">
+        <a class="btn" href={href(lang, "download")}>{h.ctaDownload}</a>
+        <a href={REPO}>{h.ctaGithub}</a>
+      </div>
+    </div>
+  </section>
+
+  <div class="wrap">
+    <ul class="ledger">
+      {h.stats.map((s) => <li><span class="figure">{s.value}</span><span class="muted small">{s.label}</span></li>)}
+    </ul>
+  </div>
+
+  <figure class="shot wrap">
+    <picture>
+      <source media="(prefers-color-scheme: dark)" srcset={`${shot("dark", 1)} 1240w, ${shot("dark", 2)} 2480w`} sizes="(max-width: 75rem) 100vw, 72rem" />
+      <img src={shot("light", 1)} srcset={`${shot("light", 1)} 1240w, ${shot("light", 2)} 2480w`} sizes="(max-width: 75rem) 100vw, 72rem" width="1240" height="760" alt={h.shot.alt} />
+    </picture>
+    <figcaption class="muted small">{h.shot.caption}</figcaption>
+  </figure>
+
+  <section class="section">
+    <div class="wrap split">
       <div>
-        <div class="eyebrow">{h.eyebrow}</div>
-        <h1><span class="grad">{h.title}</span></h1>
-        <p class="lead">{h.lead}</p>
-        <div class="cta">
-          <a class="btn btn-primary" href={href(lang, "download")}>{h.ctaDownload}</a>
-          <a class="btn btn-ghost" href={REPO}>{h.ctaGithub}</a>
-        </div>
+        <h2>{h.statsTitle}</h2>
+        <p class="muted">{h.statsNote}</p>
+        <p><a href={href(lang, "benchmarks")}>{h.statsLink}</a></p>
       </div>
-      <div class="mock" aria-hidden="true">
-        <div class="mock-h"><span class="t">Downloading</span><span class="s">48.6<small>MB/s</small></span></div>
-        <div class="row">
-          <div class="top"><span class="f">ubuntu-24.04-desktop-amd64.iso</span><span class="m">72%</span></div>
-          <div class="segs">{[100, 100, 88, 71, 64, 52, 47, 36].map((w) => <span class="seg"><i style={`width:${w}%`}></i></span>)}</div>
-        </div>
-        <div class="row">
-          <div class="top"><span class="f">lecture-12-algorithms.mp4</span><span class="m">41%</span></div>
-          <div class="segs">{[68, 52, 39, 30, 17].map((w) => <span class="seg"><i style={`width:${w}%`}></i></span>)}</div>
-        </div>
-        <div class="row done">
-          <div class="top"><span class="f">dataset-2026.tar.gz</span><span class="m">✓</span></div>
-          <div class="segs">{[100, 100, 100, 100].map((w) => <span class="seg"><i style={`width:${w}%`}></i></span>)}</div>
-        </div>
+      <Chart lang={lang} />
+    </div>
+  </section>
+
+  <section class="section night">
+    <div class="wrap kill">
+      <KillGrid label={h.kill.gridLabel} />
+      <div class="kill-text">
+        <h2>{h.kill.title}</h2>
+        <p class="muted">{h.kill.text}</p>
+        <ul class="results">
+          {h.kill.results.map((r) => <li><span class="figure">{r.value}</span><span class="muted small">{r.label}</span></li>)}
+        </ul>
+        <p class="muted">{h.kill.why}</p>
       </div>
     </div>
   </section>
 
-  <section class="band">
-    <div class="wrap">
-      <h2>{h.statsTitle}</h2>
-      <p class="muted">{h.statsNote}</p>
-      <div class="stats">
-        {h.stats.map((s) => <div class="stat"><b>{s.value}</b><span class="muted">{s.label}</span></div>)}
-      </div>
-      <p><a href={href(lang, "benchmarks")}>{h.statsLink} →</a></p>
-    </div>
-  </section>
-
-  <section>
+  <section class="section">
     <div class="wrap">
       <h2>{h.featuresTitle}</h2>
-      <div class="grid3">
-        {h.features.map((f) => <div class="card"><h3>{f.title}</h3><p>{f.text}</p></div>)}
-      </div>
+      <dl class="spec">
+        {h.features.map((f) => <div><dt>{f.title}</dt><dd>{f.text}</dd></div>)}
+      </dl>
     </div>
   </section>
 
-  <section class="band">
-    <div class="wrap two">
-      <div class="card"><h3>{h.privacyTitle}</h3><p>{h.privacyText} <a href={href(lang, "privacy")}>{h.privacyLink}</a></p></div>
-      <div class="card"><h3>{h.langTitle}</h3><p>{h.langText}</p></div>
+  <section class="section" style="padding-top:0">
+    <div class="wrap pair">
+      <div><h3>{h.privacyTitle}</h3><p class="muted">{h.privacyText} <a href={href(lang, "privacy")}>{h.privacyLink}</a></p></div>
+      <div><h3>{h.langTitle}</h3><p class="muted">{h.langText}</p></div>
     </div>
   </section>
 
-  <section id="support">
+  <section class="section support" id="support" style="padding-top:0">
     <div class="wrap">
       <h2>{t.support.title}</h2>
-      <p class="muted">{t.support.text}</p>
-      <div class="cta">
-        <a class="btn btn-primary" href="https://github.com/sponsors/coderzonebd">{t.support.sponsors}</a>
-        <a class="btn btn-ghost" href="https://buymeacoffee.com/devrkb21">{t.support.coffee}</a>
-      </div>
-      <p class="muted">{t.support.other}</p>
+      <p class="lead">{t.support.text} {t.support.other}</p>
+      <p class="actions">
+        <a href="https://github.com/sponsors/coderzonebd">{t.support.sponsors}</a>
+        <a href="https://buymeacoffee.com/devrkb21">{t.support.coffee}</a>
+      </p>
     </div>
   </section>
 </Base>

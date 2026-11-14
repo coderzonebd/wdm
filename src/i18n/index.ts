@@ -22,3 +22,15 @@ export function href(lang: Lang, page: Page, hash = ""): string {
 }
 
 export const REPO = "https://github.com/coderzonebd/whoosh-download-manager";
+
+/** Measured medians in seconds (gate run 4), for the comparison bars. */
+export const CHART = [
+  { whoosh: 0.142, other: 0.216, otherName: "aria2-next" },
+  { whoosh: 0.169, other: 0.199, otherName: "Surge" },
+  { whoosh: 0.295, other: 0.316, otherName: "Gopeed" },
+] as const;
+
+/** Digits in the page's script. */
+export function num(lang: Lang, text: string): string {
+  return lang === "bn" ? text.replace(/[0-9]/g, (d) => "০১২৩৪৫৬৭৮৯"[Number(d)] ?? d) : text;
+}

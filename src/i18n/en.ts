@@ -23,11 +23,10 @@ export const en = {
   },
   status: {
     badge: "In development",
-    text: "Whoosh is not released yet. The first public beta comes when the desktop app is finished.",
-    follow: "Watch the repository on GitHub to hear about it.",
+    text: "Not released yet. The first public beta comes when the desktop app is finished.",
+    follow: "Watch the repository on GitHub",
   },
   home: {
-    eyebrow: "Open source · Windows · macOS · Linux",
     title: "The download manager that proves it is fast.",
     lead: "Whoosh splits downloads across connections only when that really helps, survives crashes and power cuts without a broken file, and publishes every benchmark it runs against other download managers.",
     ctaDownload: "Get Whoosh",
@@ -42,6 +41,27 @@ export const en = {
       { value: "3 / 3", label: "real CDNs where no competitor was significantly faster" },
     ],
     statsLink: "See the benchmarks",
+    shot: {
+      alt: "The Whoosh desktop app: a list of downloads with their size, progress by segment, speed and time left.",
+      caption: "The desktop app, shown with demo data.",
+    },
+    chart: {
+      title: "Time to a finished file",
+      unit: "seconds, median of 7 runs. Shorter is faster. Every bar is on the same scale.",
+      cases: ["Flaky server, 100 MiB", "Stalling server, 100 MiB", "Slow-drip server, 10 MiB"],
+      sec: "s",
+    },
+    kill: {
+      title: "Killed 1,000 times in the middle of a download.",
+      text: "Each square is one kill -9 of the real Whoosh daemon while it was downloading. After every one, Whoosh read its journal and carried on where it had stopped.",
+      gridLabel: "A grid of 1,000 squares, one for each kill. None left a broken file.",
+      results: [
+        { value: "0", label: "corrupt files" },
+        { value: "0", label: "duplicate files" },
+        { value: "1,584", label: "downloads checked" },
+      ],
+      why: "A power cut or load-shedding does the same thing to a download as kill -9. That is why Whoosh writes data to disk first and records it second.",
+    },
     featuresTitle: "What it does",
     features: [
       {
@@ -160,7 +180,7 @@ export const en = {
     updated: "Last updated: 14 November 2026",
     sections: [
       { h: "The app", p: "Whoosh downloads what you ask it to and stores its settings and download list on your computer. It does not send usage data, analytics or identifiers anywhere." },
-      { h: "Crash reports", p: "Optional and off by default (they arrive with the beta). If you turn them on, a crash sends a technical report — the error, where it happened, the app version and the operating system — to our crash-report service, hosted by GlitchTip. Reports are built to leave out your file names and links. You can turn them off at any time." },
+      { h: "Crash reports", p: "Optional and off by default (they arrive with the beta). If you turn them on, a crash sends a technical report (the error, where it happened, the app version and the operating system) to our crash-report service, hosted by GlitchTip. Reports are built to leave out your file names and links. You can turn them off at any time." },
       { h: "The local API", p: "The app's background service listens only on your own computer (127.0.0.1) and accepts only clients that know a secret token stored in a file that only your user account can read." },
       { h: "Browser extension", p: "The extension collects no data. It passes the downloads you start, with the cookies and referer they need, only to the Whoosh app on your computer, through the browser's native messaging." },
       { h: "Video sites", p: "Desktop builds can use yt-dlp and ffmpeg, downloaded from their official releases when you first need them. They run on your computer." },

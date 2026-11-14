@@ -1,6 +1,7 @@
 ---
 // SPDX-License-Identifier: GPL-3.0-or-later
 import Base from "../layouts/Base.astro";
+import Chart from "./Chart.astro";
 import { REPO, strings, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -8,18 +9,17 @@ const b = strings[lang].benchmarks;
 ---
 <Base lang={lang} page="benchmarks" title={b.title}>
   <div class="page wrap">
-    <h1>{b.title}</h1>
-    <p class="lead prose">{b.lead}</p>
+    <h1 class="display">{b.title}</h1>
+    <p class="lead">{b.lead}</p>
+    <div class="prose"><Chart lang={lang} /></div>
     <div class="table-wrap">
       <table>
         <thead><tr>{b.tableHead.map((c) => <th scope="col">{c}</th>)}</tr></thead>
-        <tbody>{b.rows.map((r) => <tr><th scope="row">{r[0]}</th><td>{r[1]}</td><td>{r[2]}</td></tr>)}</tbody>
+        <tbody>{b.rows.map((r) => <tr><th scope="row">{r[0]}</th><td class="is-whoosh">{r[1]}</td><td>{r[2]}</td></tr>)}</tbody>
       </table>
     </div>
-    <div class="prose">
-      <h2>{b.methodTitle}</h2>
-      <ul>{b.method.map((m) => <li>{m}</li>)}</ul>
-      <p><a href={`${REPO}/tree/pub/docs/bench`}>{b.dataLink} →</a></p>
-    </div>
+    <h2>{b.methodTitle}</h2>
+    <ul class="bullets prose muted">{b.method.map((m) => <li>{m}</li>)}</ul>
+    <p><a href={`${REPO}/tree/pub/docs/bench`}>{b.dataLink}</a></p>
   </div>
 </Base>

@@ -1,6 +1,6 @@
 # whoosh-website
 
-The website of [Whoosh Download Manager](https://github.com/coderzonebd/whoosh-download-manager), in English and Bangla. Static pages built with [Astro](https://astro.build); no cookies, analytics or third-party scripts.
+The website of [Whoosh Download Manager](https://github.com/coderzonebd/whoosh-download-manager), in English and Bangla. Static pages built with [Astro](https://astro.build); no cookies, analytics or third-party scripts. The design system is in [MASTER.md](MASTER.md).
 
 ```bash
 pnpm install

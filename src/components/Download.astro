@@ -7,20 +7,22 @@ const { lang } = Astro.props;
 const d = strings[lang].download;
 ---
 <Base lang={lang} page="download" title={d.title}>
-  <div class="page wrap prose">
-    <h1>{d.title}</h1>
+  <div class="page wrap">
+    <h1 class="display">{d.title}</h1>
     <p class="lead">{d.lead}</p>
     <h2>{d.platformsTitle}</h2>
-    <div class="grid3">
-      {d.platforms.map((p) => <div class="card"><h3>{p.name}</h3><ul>{p.items.map((i) => <li>{i}</li>)}</ul></div>)}
-    </div>
+    <dl class="spec">
+      {d.platforms.map((p) => <div><dt>{p.name}</dt><dd>{p.items.join(lang === "bn" ? ", " : ", ")}</dd></div>)}
+    </dl>
     <h2>{d.signingTitle}</h2>
-    <p>{d.signingWindows}</p>
-    <p>{d.signingMac}</p>
+    <dl class="spec">
+      <div><dt>Windows</dt><dd>{d.signingWindows}</dd></div>
+      <div><dt>macOS</dt><dd>{d.signingMac}</dd></div>
+    </dl>
     <h2>{d.verifyTitle}</h2>
-    <p>{d.verifyText}</p>
+    <p class="prose muted">{d.verifyText}</p>
     <pre><code>{d.verifyCode}</code></pre>
     <h2>{d.sourceTitle}</h2>
-    <p>{d.sourceText} <a href={`${REPO}#quick-start`}>GitHub</a></p>
+    <p class="prose muted">{d.sourceText} <a href={`${REPO}#quick-start`}>GitHub</a></p>
   </div>
 </Base>

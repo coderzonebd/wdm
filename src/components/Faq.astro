@@ -7,8 +7,10 @@ const { lang } = Astro.props;
 const f = strings[lang].faq;
 ---
 <Base lang={lang} page="faq" title={f.title}>
-  <div class="page wrap prose">
-    <h1>{f.title}</h1>
-    {f.items.map((i) => <details><summary>{i.q}</summary><p>{i.a}</p></details>)}
+  <div class="page wrap">
+    <h1 class="display">{f.title}</h1>
+    <div style="margin-top:var(--s6)">
+      {f.items.map((i) => <details><summary>{i.q}</summary><p>{i.a}</p></details>)}
+    </div>
   </div>
 </Base>

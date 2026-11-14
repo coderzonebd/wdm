@@ -7,12 +7,14 @@ const { lang } = Astro.props;
 const e = strings[lang].extension;
 ---
 <Base lang={lang} page="extension" title={e.title}>
-  <div class="page wrap prose">
-    <h1>{e.title}</h1>
+  <div class="page wrap">
+    <h1 class="display">{e.title}</h1>
     <p class="lead">{e.lead}</p>
     <h2>{e.browsersTitle}</h2>
-    {e.browsers.map((b) => <div class="card" style="margin:12px 0"><h3>{b.name}</h3><p>{b.text}</p></div>)}
+    <dl class="spec">
+      {e.browsers.map((b) => <div><dt>{b.name}</dt><dd>{b.text}</dd></div>)}
+    </dl>
     <h2>{e.featuresTitle}</h2>
-    <ul>{e.features.map((f) => <li>{f}</li>)}</ul>
+    <ul class="bullets prose">{e.features.map((f) => <li>{f}</li>)}</ul>
   </div>
 </Base>

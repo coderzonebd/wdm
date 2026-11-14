@@ -7,9 +7,11 @@ const { lang } = Astro.props;
 const p = strings[lang].privacy;
 ---
 <Base lang={lang} page="privacy" title={p.title}>
-  <div class="page wrap prose">
-    <h1>{p.title}</h1>
-    <p class="muted">{p.updated}</p>
-    {p.sections.map((s) => <><h2>{s.h}</h2><p>{s.p}</p></>)}
+  <div class="page wrap">
+    <h1 class="display">{p.title}</h1>
+    <p class="muted small">{p.updated}</p>
+    <dl class="spec" style="margin-top:var(--s6)">
+      {p.sections.map((s) => <div><dt>{s.h}</dt><dd>{s.p}</dd></div>)}
+    </dl>
   </div>
 </Base>
