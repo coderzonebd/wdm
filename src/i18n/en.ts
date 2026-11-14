@@ -75,7 +75,7 @@ export const en = {
     },
     honest: {
       title: "No ads. No account. No tracking.",
-      text: "Whoosh is open source and sends nothing about you anywhere.",
+      text: "Whoosh is open source. The only thing it sends is an anonymous crash report when something breaks, with no file names or links, and you can turn that off.",
       link: "Privacy",
     },
     lang: {
@@ -157,16 +157,16 @@ export const en = {
       { q: "When can I use it?", a: "The engine, daemon and command line work today if you build them from source. The desktop app and browser extension are being finished; the first public beta follows." },
       { q: "Which systems does it run on?", a: "Windows 10 and 11, macOS 12 or later, and Linux. Android and iOS are planned later." },
       { q: "Why is it called crash-proof?", a: "Whoosh records progress in a journal only after the data is on disk, and only calls a file finished once it and its name are safely stored. A power cut, load-shedding or a crash never leaves a broken or duplicate file; the download resumes where it was." },
-      { q: "Does it collect data?", a: "No. Nothing is sent anywhere unless you turn on crash reports. See Privacy." },
+      { q: "Does it collect data?", a: "No usage data, no analytics, no account. When Whoosh crashes it sends an anonymous crash report so we can fix the bug: the error and where it happened, never your file names or links. It is on by default and you can turn it off in Settings. See Privacy." },
       { q: "Can I help?", a: "Yes: report bugs, translate, or send code. Pull requests go to the dev branch on GitHub." },
     ],
   },
   privacy: {
     title: "Privacy",
-    updated: "Last updated: 14 November 2026",
+    updated: "Last updated: 14 November 2026 (crash reports are now on by default)",
     sections: [
       { h: "The app", p: "Whoosh downloads what you ask it to and stores its settings and download list on your computer. It does not send usage data, analytics or identifiers anywhere." },
-      { h: "Crash reports", p: "Optional and off by default (they arrive with the beta). If you turn them on, a crash sends a technical report (the error, where it happened, the app version and the operating system) to our crash-report service, hosted by GlitchTip. Reports are built to leave out your file names and links. You can turn them off at any time." },
+      { h: "Crash reports", p: "On by default, and you can turn them off at any time in Settings; the first time Whoosh runs it tells you so. When Whoosh crashes, it sends a technical report (the error, where it happened, the app version and the operating system) to our crash-report service, hosted by GlitchTip. Before anything leaves your computer, Whoosh removes file names, paths, links, cookies, headers and user names from the report. There is no performance tracking and no recording of what you do. Builds made from source without our crash-report address send nothing." },
       { h: "The local API", p: "The app's background service listens only on your own computer (127.0.0.1) and accepts only clients that know a secret token stored in a file that only your user account can read." },
       { h: "Browser extension", p: "The extension collects no data. It passes the downloads you start, with the cookies and referer they need, only to the Whoosh app on your computer, through the browser's native messaging." },
       { h: "Video sites", p: "Desktop builds can use yt-dlp and ffmpeg, downloaded from their official releases when you first need them. They run on your computer." },
