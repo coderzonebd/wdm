@@ -1,0 +1,15 @@
+---
+// SPDX-License-Identifier: GPL-3.0-or-later
+import Base from "../layouts/Base.astro";
+import { strings, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const p = strings[lang].privacy;
+---
+<Base lang={lang} page="privacy" title={p.title}>
+  <div class="page wrap prose">
+    <h1>{p.title}</h1>
+    <p class="muted">{p.updated}</p>
+    {p.sections.map((s) => <><h2>{s.h}</h2><p>{s.p}</p></>)}
+  </div>
+</Base>

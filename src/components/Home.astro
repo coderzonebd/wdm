@@ -1,0 +1,78 @@
+---
+// SPDX-License-Identifier: GPL-3.0-or-later
+import Base from "../layouts/Base.astro";
+import { href, REPO, strings, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const t = strings[lang];
+const h = t.home;
+---
+<Base lang={lang} page="home">
+  <section class="hero">
+    <div class="wrap">
+      <div>
+        <div class="eyebrow">{h.eyebrow}</div>
+        <h1><span class="grad">{h.title}</span></h1>
+        <p class="lead">{h.lead}</p>
+        <div class="cta">
+          <a class="btn btn-primary" href={href(lang, "download")}>{h.ctaDownload}</a>
+          <a class="btn btn-ghost" href={REPO}>{h.ctaGithub}</a>
+        </div>
+      </div>
+      <div class="mock" aria-hidden="true">
+        <div class="mock-h"><span class="t">Downloading</span><span class="s">48.6<small>MB/s</small></span></div>
+        <div class="row">
+          <div class="top"><span class="f">ubuntu-24.04-desktop-amd64.iso</span><span class="m">72%</span></div>
+          <div class="segs">{[100, 100, 88, 71, 64, 52, 47, 36].map((w) => <span class="seg"><i style={`width:${w}%`}></i></span>)}</div>
+        </div>
+        <div class="row">
+          <div class="top"><span class="f">lecture-12-algorithms.mp4</span><span class="m">41%</span></div>
+          <div class="segs">{[68, 52, 39, 30, 17].map((w) => <span class="seg"><i style={`width:${w}%`}></i></span>)}</div>
+        </div>
+        <div class="row done">
+          <div class="top"><span class="f">dataset-2026.tar.gz</span><span class="m">✓</span></div>
+          <div class="segs">{[100, 100, 100, 100].map((w) => <span class="seg"><i style={`width:${w}%`}></i></span>)}</div>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <h2>{h.statsTitle}</h2>
+      <p class="muted">{h.statsNote}</p>
+      <div class="stats">
+        {h.stats.map((s) => <div class="stat"><b>{s.value}</b><span class="muted">{s.label}</span></div>)}
+      </div>
+      <p><a href={href(lang, "benchmarks")}>{h.statsLink} →</a></p>
+    </div>
+  </section>
+
+  <section>
+    <div class="wrap">
+      <h2>{h.featuresTitle}</h2>
+      <div class="grid3">
+        {h.features.map((f) => <div class="card"><h3>{f.title}</h3><p>{f.text}</p></div>)}
+      </div>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap two">
+      <div class="card"><h3>{h.privacyTitle}</h3><p>{h.privacyText} <a href={href(lang, "privacy")}>{h.privacyLink}</a></p></div>
+      <div class="card"><h3>{h.langTitle}</h3><p>{h.langText}</p></div>
+    </div>
+  </section>
+
+  <section id="support">
+    <div class="wrap">
+      <h2>{t.support.title}</h2>
+      <p class="muted">{t.support.text}</p>
+      <div class="cta">
+        <a class="btn btn-primary" href="https://github.com/sponsors/coderzonebd">{t.support.sponsors}</a>
+        <a class="btn btn-ghost" href="https://buymeacoffee.com/devrkb21">{t.support.coffee}</a>
+      </div>
+      <p class="muted">{t.support.other}</p>
+    </div>
+  </section>
+</Base>

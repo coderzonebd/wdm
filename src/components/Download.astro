@@ -1,0 +1,26 @@
+---
+// SPDX-License-Identifier: GPL-3.0-or-later
+import Base from "../layouts/Base.astro";
+import { REPO, strings, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const d = strings[lang].download;
+---
+<Base lang={lang} page="download" title={d.title}>
+  <div class="page wrap prose">
+    <h1>{d.title}</h1>
+    <p class="lead">{d.lead}</p>
+    <h2>{d.platformsTitle}</h2>
+    <div class="grid3">
+      {d.platforms.map((p) => <div class="card"><h3>{p.name}</h3><ul>{p.items.map((i) => <li>{i}</li>)}</ul></div>)}
+    </div>
+    <h2>{d.signingTitle}</h2>
+    <p>{d.signingWindows}</p>
+    <p>{d.signingMac}</p>
+    <h2>{d.verifyTitle}</h2>
+    <p>{d.verifyText}</p>
+    <pre><code>{d.verifyCode}</code></pre>
+    <h2>{d.sourceTitle}</h2>
+    <p>{d.sourceText} <a href={`${REPO}#quick-start`}>GitHub</a></p>
+  </div>
+</Base>

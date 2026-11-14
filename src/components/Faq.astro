@@ -1,0 +1,14 @@
+---
+// SPDX-License-Identifier: GPL-3.0-or-later
+import Base from "../layouts/Base.astro";
+import { strings, type Lang } from "../i18n";
+interface Props { lang: Lang }
+const { lang } = Astro.props;
+const f = strings[lang].faq;
+---
+<Base lang={lang} page="faq" title={f.title}>
+  <div class="page wrap prose">
+    <h1>{f.title}</h1>
+    {f.items.map((i) => <details><summary>{i.q}</summary><p>{i.a}</p></details>)}
+  </div>
+</Base>
