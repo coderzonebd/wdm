@@ -28,6 +28,7 @@ const nav: [Page, string][] = [
 <html lang={lang} dir={t.dir}>
   <head>
     <meta charset="utf-8" />
+    <script is:inline>if (!matchMedia("(prefers-reduced-motion: reduce)").matches) document.documentElement.classList.add("js");</script>
     <meta name="viewport" content="width=device-width, initial-scale=1" />
     <title>{fullTitle}</title>
     <meta name="description" content={desc} />
@@ -110,6 +111,35 @@ const nav: [Page, string][] = [
           el.classList.add("js-play");
           io.observe(el);
         }
+      }
+      // Sections come up once as they scroll into view.
+      if (document.documentElement.classList.contains("js") && "IntersectionObserver" in window) {
+        const seen = new IntersectionObserver(
+          (entries) => {
+            for (const e of entries) {
+              if (!e.isIntersecting) continue;
+              seen.unobserve(e.target);
+              e.target.classList.add("in");
+              const n = e.target.querySelector<HTMLElement>("[data-count]") ?? (e.target.matches("[data-count]") ? (e.target as HTMLElement) : null);
+              if (n) count(n);
+            }
+          },
+          { threshold: 0.15, rootMargin: "0px 0px -8% 0px" },
+        );
+        for (const el of document.querySelectorAll("[data-reveal]")) seen.observe(el);
+      }
+      // Counts a figure up to its value, in the page's own digits.
+      function count(el: HTMLElement) {
+        const to = Number(el.dataset.count);
+        const fmt = new Intl.NumberFormat(document.documentElement.lang === "bn" ? "bn-BD" : "en-US");
+        const start = performance.now();
+        const total = 1200;
+        const tick = (now: number) => {
+          const k = Math.min(1, (now - start) / total);
+          el.textContent = fmt.format(Math.round(to * (1 - Math.pow(1 - k, 3))));
+          if (k < 1) requestAnimationFrame(tick);
+        };
+        requestAnimationFrame(tick);
       }
       // Fills to the cut, waits as if the power were out, then carries on.
       function power(el: HTMLElement) {

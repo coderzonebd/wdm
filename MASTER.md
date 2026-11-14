@@ -6,9 +6,9 @@ The single source for the site's look. `src/styles/global.css` holds these value
 
 **Visual thesis.** Direction B, chosen by the owner from three mock-ups: bright Whoosh blue as the ground of the hero and page heads, yellow as the one accent, navy for ink and outlines; Baloo Da 2 for everything, because it is one rounded, friendly family drawn for both Bangla and Latin; big type, generous space; rounded "sticker" components (pills, thick navy outlines, hard offset shadows); the logo's wind lines drawn large behind the blue bands.
 
-**Interaction thesis.** Quick and springy without bounce (120–200ms, ease-out): buttons lift 2px on hover and press down on click; links thicken their underline; two data plays run once when scrolled into view (the comparison bars grow to their measured length, the power-cut bar fills, pauses at the cut and carries on). No parallax, no loops, no glow, no gradient text.
+**Interaction thesis.** Lively, as the owner asked ("not static"), and quick (120–200ms for hovers, 700–900ms for arrivals, ease-out, no bounce). On first paint the headline rises in and its second line fills from left to right like a download finishing, the wind lines draw themselves, and thin wind streaks keep crossing the hero. Sections rise in once as they scroll into view, with a short stagger; the 1,000 counts up; the comparison bars grow to their measured length; the power-cut bar fills, pauses at the cut and carries on. Buttons lift on hover and press down on click. No parallax, no glow, no gradient text.
 
-**Allowed patterns:** the wind lines behind blue bands (the logo's own mark); pills for platforms; hard offset shadows; measured comparison bars on one shared scale; the power-cut bar; a real screenshot of the app with demo files, labelled as such; the taglines "Whoosh. It's downloaded.", "The power can go. Your download won't." and "Download anything. Lose nothing."
+**Allowed patterns:** the wind lines behind blue bands (the logo's own mark); looping wind streaks in the hero (the product's name, shown); entrance and scroll reveals; a count-up on the 1,000; pills for platforms; hard offset shadows; measured comparison bars on one shared scale; the power-cut bar; a real screenshot of the app with demo files, labelled as such; the taglines "Whoosh. It's downloaded.", "The power can go. Your download won't." and "Download anything. Lose nothing."
 
 ## Colour
 
@@ -38,4 +38,4 @@ Baloo Da 2 Variable (400–800), self-hosted through Fontsource; fallback `"Nirm
 
 ## Motion
 
-`--fast` 120ms, `--base` 200ms, `--draw` 700ms; `--ease` cubic-bezier(0.2, 0.8, 0.2, 1). Power bar: 28ms per segment, 700ms pause at the cut. With reduced motion or without JavaScript both plays show their final state.
+`--fast` 120ms, `--base` 200ms, `--draw` 700ms; `--ease` cubic-bezier(0.2, 0.8, 0.2, 1). Power bar: 28ms per segment, 700ms pause at the cut. Entrances `rise` 700ms with a 90ms stagger, `fill` 900ms, `draw` 1800ms; streaks 6–9s linear, looping; reveals 700ms with an 80ms stagger; count-up 1200ms. With reduced motion or without JavaScript nothing moves and everything is shown in its final state.

@@ -10,7 +10,7 @@ const p = strings[lang].privacy;
 <Base lang={lang} page="privacy" title={p.title}>
   <PageHead title={p.title} lead={p.updated} />
   <div class="page-body"><div class="wrap">
-    <dl class="rows">
+    <dl class="rows" data-reveal>
       {p.sections.map((s) => <div><dt>{s.h}</dt><dd>{s.p}</dd></div>)}
     </dl>
   </div></div>

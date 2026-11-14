@@ -10,6 +10,6 @@ const f = strings[lang].faq;
 <Base lang={lang} page="faq" title={f.title}>
   <PageHead title={f.title} />
   <div class="page-body"><div class="wrap prose" style="margin-inline:0">
-    {f.items.map((i) => <details><summary>{i.q}</summary><p>{i.a}</p></details>)}
+    {f.items.map((i, n) => <details data-reveal style={`--i:${Math.min(n, 5)}`}><summary>{i.q}</summary><p>{i.a}</p></details>)}
   </div></div>
 </Base>

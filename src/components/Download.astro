@@ -11,11 +11,11 @@ const d = strings[lang].download;
   <PageHead title={d.title} lead={d.lead} />
   <div class="page-body"><div class="wrap">
     <h2>{d.platformsTitle}</h2>
-    <dl class="rows">
+    <dl class="rows" data-reveal>
       {d.platforms.map((p) => <div><dt>{p.name}</dt><dd>{p.items.join(", ")}</dd></div>)}
     </dl>
     <h2>{d.signingTitle}</h2>
-    <dl class="rows">
+    <dl class="rows" data-reveal>
       <div><dt>Windows</dt><dd>{d.signingWindows}</dd></div>
       <div><dt>macOS</dt><dd>{d.signingMac}</dd></div>
     </dl>

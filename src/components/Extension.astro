@@ -11,9 +11,9 @@ const e = strings[lang].extension;
   <PageHead title={e.title} lead={e.lead} />
   <div class="page-body"><div class="wrap">
     <h2>{e.featuresTitle}</h2>
-    <ul class="bullets prose">{e.features.map((f) => <li>{f}</li>)}</ul>
+    <ul class="bullets prose" data-reveal>{e.features.map((f) => <li>{f}</li>)}</ul>
     <h2>{e.browsersTitle}</h2>
-    <dl class="rows">
+    <dl class="rows" data-reveal>
       {e.browsers.map((b) => <div><dt>{b.name}</dt><dd>{b.text}</dd></div>)}
     </dl>
   </div></div>
