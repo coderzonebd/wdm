@@ -1,0 +1,13 @@
+---
+// SPDX-License-Identifier: GPL-3.0-or-later
+import Wind from "./Wind.astro";
+interface Props { title: string; lead?: string }
+const { title, lead } = Astro.props;
+---
+<header class="page-head">
+  <Wind />
+  <div class="wrap">
+    <h1 class="page-title">{title}</h1>
+    {lead && <p class="lead soft">{lead}</p>}
+  </div>
+</header>

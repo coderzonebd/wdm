@@ -1,16 +1,15 @@
 ---
 // SPDX-License-Identifier: GPL-3.0-or-later
 import Base from "../layouts/Base.astro";
+import PageHead from "./PageHead.astro";
 import { strings, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const f = strings[lang].faq;
 ---
 <Base lang={lang} page="faq" title={f.title}>
-  <div class="page wrap">
-    <h1 class="display">{f.title}</h1>
-    <div style="margin-top:var(--s6)">
-      {f.items.map((i) => <details><summary>{i.q}</summary><p>{i.a}</p></details>)}
-    </div>
-  </div>
+  <PageHead title={f.title} />
+  <div class="page-body"><div class="wrap prose" style="margin-inline:0">
+    {f.items.map((i) => <details><summary>{i.q}</summary><p>{i.a}</p></details>)}
+  </div></div>
 </Base>

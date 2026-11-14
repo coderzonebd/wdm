@@ -1,21 +1,21 @@
 ---
 // SPDX-License-Identifier: GPL-3.0-or-later
 import Base from "../layouts/Base.astro";
+import PageHead from "./PageHead.astro";
 import { REPO, strings, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const d = strings[lang].download;
 ---
 <Base lang={lang} page="download" title={d.title}>
-  <div class="page wrap">
-    <h1 class="display">{d.title}</h1>
-    <p class="lead">{d.lead}</p>
+  <PageHead title={d.title} lead={d.lead} />
+  <div class="page-body"><div class="wrap">
     <h2>{d.platformsTitle}</h2>
-    <dl class="spec">
-      {d.platforms.map((p) => <div><dt>{p.name}</dt><dd>{p.items.join(lang === "bn" ? ", " : ", ")}</dd></div>)}
+    <dl class="rows">
+      {d.platforms.map((p) => <div><dt>{p.name}</dt><dd>{p.items.join(", ")}</dd></div>)}
     </dl>
     <h2>{d.signingTitle}</h2>
-    <dl class="spec">
+    <dl class="rows">
       <div><dt>Windows</dt><dd>{d.signingWindows}</dd></div>
       <div><dt>macOS</dt><dd>{d.signingMac}</dd></div>
     </dl>
@@ -24,5 +24,5 @@ const d = strings[lang].download;
     <pre><code>{d.verifyCode}</code></pre>
     <h2>{d.sourceTitle}</h2>
     <p class="prose muted">{d.sourceText} <a href={`${REPO}#quick-start`}>GitHub</a></p>
-  </div>
+  </div></div>
 </Base>

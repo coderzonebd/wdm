@@ -166,10 +166,7 @@ importers:
 
   .:
     dependencies:
-      '@fontsource-variable/anek-bangla':
-        specifier: ^5.3.0
-        version: 5.3.0
-      '@fontsource-variable/anek-latin':
+      '@fontsource-variable/baloo-da-2':
         specifier: ^5.3.0
         version: 5.3.0
       astro:
@@ -439,11 +436,8 @@ packages:
   '@emnapi/wasi-threads@2.2.0':
     resolution: {integrity: sha512-JP7OYH38Q7+pyTAe14raZHLQIK7BDKbdwji+Xi3pcd/6QkJYQH3SX4wu6EplGrGJWRepoNzedfm0G3B9Z4e9Rw==}
 
-  '@fontsource-variable/anek-bangla@5.3.0':
-    resolution: {integrity: sha512-OekuT8LFbA86VSfLjv6I6V2SS5owqTN+NHmhsr+3qHpCr4oqehkjvgDGuAyPH65BOIqVme0eLK7c2Ucml9gblg==}
-
-  '@fontsource-variable/anek-latin@5.3.0':
-    resolution: {integrity: sha512-NqJVtTUYWkPMPXsEy4Ve/xRnXrKLw/gfUYzLidSsdJAMEgNsRNYpJZkorD/xDyBS2mxhfu/y6KsWTetowCQjrQ==}
+  '@fontsource-variable/baloo-da-2@5.3.0':
+    resolution: {integrity: sha512-EWMH2MQ5k8P+XFVxiC/ohtgLC8OwRQZLFawF6OkvF4TfZJbpXDL3dEWR9792YE79H04QoT3TJQoD4T5Di0Ti6A==}
 
   '@img/colour@1.1.0':
     resolution: {integrity: sha512-Td76q7j57o/tLVdgS746cYARfSyxk8iEfRxewL9h4OMzYhbW4TAcppl0mT4eyqXddh6L/jwoM75mo7ixa/pCeQ==}
@@ -2052,9 +2046,7 @@ snapshots:
       tslib: 2.9.1
     optional: true
 
-  '@fontsource-variable/anek-bangla@5.3.0': {}
-
-  '@fontsource-variable/anek-latin@5.3.0': {}
+  '@fontsource-variable/baloo-da-2@5.3.0': {}
 
   '@img/colour@1.1.0':
     optional: true

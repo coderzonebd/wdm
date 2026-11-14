@@ -1,17 +1,17 @@
 ---
 // SPDX-License-Identifier: GPL-3.0-or-later
 import Base from "../layouts/Base.astro";
+import PageHead from "./PageHead.astro";
 import { strings, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const p = strings[lang].privacy;
 ---
 <Base lang={lang} page="privacy" title={p.title}>
-  <div class="page wrap">
-    <h1 class="display">{p.title}</h1>
-    <p class="muted small">{p.updated}</p>
-    <dl class="spec" style="margin-top:var(--s6)">
+  <PageHead title={p.title} lead={p.updated} />
+  <div class="page-body"><div class="wrap">
+    <dl class="rows">
       {p.sections.map((s) => <div><dt>{s.h}</dt><dd>{s.p}</dd></div>)}
     </dl>
-  </div>
+  </div></div>
 </Base>

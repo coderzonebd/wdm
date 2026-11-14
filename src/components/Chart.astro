@@ -6,16 +6,16 @@ interface Props { lang: Lang }
 const { lang } = Astro.props;
 const c = strings[lang].home.chart;
 const max = Math.max(...CHART.flatMap((r) => [r.whoosh, r.other]));
-const pct = (v: number) => `${((v / max) * 72).toFixed(1)}%`;
+const pct = (v: number) => `${((v / max) * 70).toFixed(1)}%`;
 const sec = (v: number) => `${num(lang, v.toFixed(3))} ${c.sec}`;
 ---
-<div class="chart" data-play="bars">
+<div class="chart panel" data-play="bars">
   <p class="chart-title">{c.title}</p>
   <p class="muted small">{c.unit}</p>
   {CHART.map((r, i) => (
     <div class="chart-case">
       <p>{c.cases[i]}</p>
-      <div class="chart-row"><span>Whoosh</span><span class="chart-track"><span class="bar is-whoosh" style={`width:${pct(r.whoosh)}`}></span><b>{sec(r.whoosh)}</b></span></div>
+      <div class="chart-row"><b>Whoosh</b><span class="chart-track"><span class="bar is-whoosh" style={`width:${pct(r.whoosh)}`}></span><b>{sec(r.whoosh)}</b></span></div>
       <div class="chart-row"><span class="muted">{r.otherName}</span><span class="chart-track"><span class="bar" style={`width:${pct(r.other)}`}></span><span class="muted">{sec(r.other)}</span></span></div>
     </div>
   ))}

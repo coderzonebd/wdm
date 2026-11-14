@@ -2,90 +2,93 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import Base from "../layouts/Base.astro";
 import Chart from "./Chart.astro";
-import KillGrid from "./KillGrid.astro";
-import { href, REPO, strings, type Lang } from "../i18n";
+import PowerBar from "./PowerBar.astro";
+import Wind from "./Wind.astro";
+import { href, strings, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const t = strings[lang];
 const h = t.home;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
-const shot = (scheme: "light" | "dark", x: 1 | 2) => `${base}shots/app-${lang}-${scheme}${x === 1 ? "-1x" : ""}.webp`;
+const shot = (x: 1 | 2) => `${base}shots/app-${lang}-light${x === 1 ? "-1x" : ""}.webp`;
 ---
 <Base lang={lang} page="home">
-  <section class="hero wrap">
-    <h1 class="display">{h.title}</h1>
-    <div class="hero-sub">
-      <p class="lead">{h.lead}</p>
+  <section class="hero">
+    <div class="hero-clip"><Wind /></div>
+    <div class="wrap">
+      <p class="pill">{h.soon}</p>
+      <h1 class="display">{h.title1}<br /><span class="hl">{h.title2}</span></h1>
+      <p class="lead soft">{h.lead}</p>
       <div class="actions">
-        <a class="btn" href={href(lang, "download")}>{h.ctaDownload}</a>
-        <a href={REPO}>{h.ctaGithub}</a>
+        <a class="btn" href={href(lang, "download")}>{h.cta}</a>
+        <a class="btn btn--white" href={href(lang, "benchmarks")}>{h.cta2}</a>
       </div>
+      <ul class="pills">{h.platforms.map((p) => <li class="pill">{p}</li>)}</ul>
+      <figure class="hero-shot">
+        <div class="frame">
+          <img src={shot(1)} srcset={`${shot(1)} 1240w, ${shot(2)} 2480w`} sizes="(max-width: 82rem) 92vw, 73rem" width="1240" height="760" alt={h.shot.alt} />
+        </div>
+      </figure>
     </div>
   </section>
 
-  <div class="wrap">
-    <ul class="ledger">
-      {h.stats.map((s) => <li><span class="figure">{s.value}</span><span class="muted small">{s.label}</span></li>)}
-    </ul>
-  </div>
-
-  <figure class="shot wrap">
-    <picture>
-      <source media="(prefers-color-scheme: dark)" srcset={`${shot("dark", 1)} 1240w, ${shot("dark", 2)} 2480w`} sizes="(max-width: 75rem) 100vw, 72rem" />
-      <img src={shot("light", 1)} srcset={`${shot("light", 1)} 1240w, ${shot("light", 2)} 2480w`} sizes="(max-width: 75rem) 100vw, 72rem" width="1240" height="760" alt={h.shot.alt} />
-    </picture>
-    <figcaption class="muted small">{h.shot.caption}</figcaption>
-  </figure>
-
-  <section class="section">
-    <div class="wrap split">
+  <section class="band band--paper after-hero">
+    <div class="wrap">
+      <p class="caption muted small">{h.shot.caption}</p>
+    </div>
+    <div class="wrap split" style="margin-top:var(--s12)">
       <div>
-        <h2>{h.statsTitle}</h2>
-        <p class="muted">{h.statsNote}</p>
-        <p><a href={href(lang, "benchmarks")}>{h.statsLink}</a></p>
+        <h2>{h.fast.title}</h2>
+        <p class="lead muted">{h.fast.text}</p>
+        <p><a href={href(lang, "benchmarks")}>{h.fast.link}</a></p>
       </div>
       <Chart lang={lang} />
     </div>
   </section>
 
-  <section class="section night">
-    <div class="wrap kill">
-      <KillGrid label={h.kill.gridLabel} />
-      <div class="kill-text">
-        <h2>{h.kill.title}</h2>
-        <p class="muted">{h.kill.text}</p>
-        <ul class="results">
-          {h.kill.results.map((r) => <li><span class="figure">{r.value}</span><span class="muted small">{r.label}</span></li>)}
-        </ul>
-        <p class="muted">{h.kill.why}</p>
+  <section class="band band--navy">
+    <div class="wrap">
+      <h2 class="page-title">{h.power.title1}<br /><span class="hl">{h.power.title2}</span></h2>
+      <p class="lead soft" style="margin-top:var(--s4)">{h.power.text}</p>
+      <PowerBar label={h.power.barLabel} cut={h.power.cut} resume={h.power.resume} />
+      <ul class="results">
+        {h.power.results.map((r) => <li><span class="figure">{r.value}</span><span class="soft">{r.label}</span></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band">
+    <div class="wrap">
+      <h2 class="page-title">{h.all.title1}<br /><span class="hl-blue">{h.all.title2}</span></h2>
+      <ul class="features">
+        {h.all.items.map((f) => <li><h3>{f.title}</h3><p>{f.text}</p></li>)}
+      </ul>
+    </div>
+  </section>
+
+  <section class="band band--yellow">
+    <div class="wrap split">
+      <div>
+        <h2>{h.browser.title}</h2>
+        <p class="lead">{h.browser.text}</p>
+        <p><a href={href(lang, "extension")}>{h.browser.link}</a></p>
+      </div>
+      <div class="duo">
+        <div><h3>{h.honest.title}</h3><p>{h.honest.text} <a href={href(lang, "privacy")}>{h.honest.link}</a></p></div>
+        <div><h3>{h.lang.title}</h3><p>{h.lang.text}</p></div>
       </div>
     </div>
   </section>
 
-  <section class="section">
+  <section class="band band--blue closing" id="support">
     <div class="wrap">
-      <h2>{h.featuresTitle}</h2>
-      <dl class="spec">
-        {h.features.map((f) => <div><dt>{f.title}</dt><dd>{f.text}</dd></div>)}
-      </dl>
-    </div>
-  </section>
-
-  <section class="section" style="padding-top:0">
-    <div class="wrap pair">
-      <div><h3>{h.privacyTitle}</h3><p class="muted">{h.privacyText} <a href={href(lang, "privacy")}>{h.privacyLink}</a></p></div>
-      <div><h3>{h.langTitle}</h3><p class="muted">{h.langText}</p></div>
-    </div>
-  </section>
-
-  <section class="section support" id="support" style="padding-top:0">
-    <div class="wrap">
-      <h2>{t.support.title}</h2>
-      <p class="lead">{t.support.text} {t.support.other}</p>
-      <p class="actions">
-        <a href="https://github.com/sponsors/coderzonebd">{t.support.sponsors}</a>
-        <a href="https://buymeacoffee.com/devrkb21">{t.support.coffee}</a>
-      </p>
+      <h2 class="page-title">{h.title1}<br /><span class="hl">{h.title2}</span></h2>
+      <p class="lead soft">{t.support.text}</p>
+      <div class="actions">
+        <a class="btn" href={href(lang, "download")}>{h.cta}</a>
+        <a class="btn btn--white" href="https://github.com/sponsors/coderzonebd">{t.support.sponsors}</a>
+        <a class="btn btn--white" href="https://buymeacoffee.com/devrkb21">{t.support.coffee}</a>
+      </div>
     </div>
   </section>
 </Base>

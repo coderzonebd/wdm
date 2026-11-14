@@ -1,7 +1,6 @@
 ---
 // SPDX-License-Identifier: GPL-3.0-or-later
-import "@fontsource-variable/anek-latin/standard.css";
-import "@fontsource-variable/anek-bangla/standard.css";
+import "@fontsource-variable/baloo-da-2";
 import "../styles/global.css";
 import { href, REPO, strings, type Lang, type Page } from "../i18n";
 
@@ -20,7 +19,6 @@ const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const canonical = new URL(href(lang, page), Astro.site).toString();
 const ogImage = new URL(`${base}og.png`, Astro.site).toString();
 const nav: [Page, string][] = [
-  ["download", t.nav.download],
   ["extension", t.nav.extension],
   ["benchmarks", t.nav.benchmarks],
   ["faq", t.nav.faq],
@@ -45,16 +43,15 @@ const nav: [Page, string][] = [
     <meta property="og:image:width" content="1280" />
     <meta property="og:image:height" content="640" />
     <meta name="twitter:card" content="summary_large_image" />
-    <meta name="theme-color" content="#f4f6f9" media="(prefers-color-scheme: light)" />
-    <meta name="theme-color" content="#0b1120" media="(prefers-color-scheme: dark)" />
+    <meta name="theme-color" content="#2563eb" />
   </head>
   <body>
     <a class="skip" href="#main">{t.nav.skip}</a>
     <header class="site-header">
       <div class="wrap">
         <a class="brand" href={href(lang, "home")}>
-          <img src={`${base}favicon.svg`} alt="" width="32" height="32" />
-          <span>{t.meta.title}</span>
+          <img src={`${base}favicon.svg`} alt="" width="36" height="36" />
+          <span>Whoosh</span>
         </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">{t.nav.menu}</button>
         <nav class="nav" id="site-nav" aria-label={t.nav.menu}>
@@ -63,12 +60,10 @@ const nav: [Page, string][] = [
           ))}
           <a href={REPO}>{t.nav.github}</a>
           <a href={href(other, page)} hreflang={other} lang={other}>{t.nav.language}</a>
+          <a class="nav-cta" href={href(lang, "download")}>{t.nav.cta}</a>
         </nav>
       </div>
     </header>
-    <p class="notice">
-      <span class="wrap" style="display:block">{t.status.text} <a href={REPO}>{t.status.follow}</a></span>
-    </p>
     <main id="main">
       <slot />
     </main>
@@ -105,7 +100,7 @@ const nav: [Page, string][] = [
               if (!e.isIntersecting) continue;
               io.unobserve(e.target);
               const el = e.target as HTMLElement;
-              if (el.dataset.play === "grid") fill(el);
+              if (el.dataset.play === "power") power(el);
               else el.classList.replace("js-play", "js-played");
             }
           },
@@ -116,18 +111,18 @@ const nav: [Page, string][] = [
           io.observe(el);
         }
       }
-      function fill(el: HTMLElement) {
-        const cells = [...el.querySelectorAll("rect")];
-        const total = 1400;
-        const start = performance.now();
-        let done = 0;
-        const step = (now: number) => {
-          const upTo = Math.min(cells.length, Math.ceil(((now - start) / total) * cells.length));
-          for (; done < upTo; done++) cells[done]?.classList.add("on");
-          if (done < cells.length) requestAnimationFrame(step);
-          else el.classList.remove("js-play");
-        };
-        requestAnimationFrame(step);
+      // Fills to the cut, waits as if the power were out, then carries on.
+      function power(el: HTMLElement) {
+        const cells = [...el.querySelectorAll("i")];
+        const cut = Number(el.dataset.cut);
+        const per = 28;
+        const pause = 700;
+        cells.forEach((cell, i) => {
+          setTimeout(() => {
+            cell.classList.add("on");
+            if (i === cells.length - 1) el.classList.remove("js-play");
+          }, i * per + (i >= cut ? pause : 0));
+        });
       }
     </script>
   </body>

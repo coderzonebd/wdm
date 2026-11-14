@@ -10,96 +10,82 @@ export const en = {
       "Whoosh (WDM) is an open-source, crash-proof download manager for Windows, macOS and Linux, measured against every competitor in public.",
   },
   nav: {
-    home: "Home",
     download: "Download",
-    extension: "Browser extension",
-    benchmarks: "Benchmarks",
-    faq: "FAQ",
-    support: "Support",
+    extension: "Extension",
+    benchmarks: "Speed tests",
+    faq: "Questions",
     github: "GitHub",
     language: "বাংলা",
     menu: "Menu",
     skip: "Skip to content",
-  },
-  status: {
-    badge: "In development",
-    text: "Not released yet. The first public beta comes when the desktop app is finished.",
-    follow: "Watch the repository on GitHub",
+    cta: "Get Whoosh",
   },
   home: {
-    title: "The download manager that proves it is fast.",
-    lead: "Whoosh splits downloads across connections only when that really helps, survives crashes and power cuts without a broken file, and publishes every benchmark it runs against other download managers.",
-    ctaDownload: "Get Whoosh",
-    ctaGithub: "Source on GitHub",
-    statsTitle: "Measured, not claimed",
-    statsNote:
-      "From the public Phase 1 benchmark: 7 runs per case, a Mann-Whitney U test, and time counted until the file is safely on disk.",
-    stats: [
-      { value: "175 / 175", label: "runs byte-exact, 0 wrong file names" },
-      { value: "0", label: "corrupt or duplicate files after 1,000 × kill -9" },
-      { value: "1.26 CPU-s", label: "per GiB, the lowest of all clients tested" },
-      { value: "3 / 3", label: "real CDNs where no competitor was significantly faster" },
-    ],
-    statsLink: "See the benchmarks",
+    soon: "Coming soon: the first public beta",
+    title1: "Whoosh.",
+    title2: "It's downloaded.",
+    lead: "The free download manager that goes as fast as your connection allows, and never hands you a broken file.",
+    cta: "Get Whoosh, free",
+    cta2: "See the speed tests",
+    platforms: ["Windows", "macOS", "Linux", "Firefox, Edge and Chrome"],
     shot: {
-      alt: "The Whoosh desktop app: a list of downloads with their size, progress by segment, speed and time left.",
-      caption: "The desktop app, shown with demo data.",
+      alt: "The Whoosh app: a list of downloads with their size, progress, speed and time left.",
+      caption: "The Whoosh app, shown with demo files.",
+    },
+    fast: {
+      title: "As fast as your internet can go.",
+      text: "Whoosh opens extra connections only when they make a file arrive sooner, and eases off when a server pushes back. We race it against other download managers and publish every result, wins and losses.",
+      link: "All the speed tests",
     },
     chart: {
       title: "Time to a finished file",
-      unit: "seconds, median of 7 runs. Shorter is faster. Every bar is on the same scale.",
-      cases: ["Flaky server, 100 MiB", "Stalling server, 100 MiB", "Slow-drip server, 10 MiB"],
+      unit: "In seconds, the middle result of 7 runs. Shorter is faster.",
+      cases: ["A server that keeps dropping the line, 100 MiB", "A server that stalls, 100 MiB", "A server that drips data slowly, 10 MiB"],
       sec: "s",
     },
-    kill: {
-      title: "Killed 1,000 times in the middle of a download.",
-      text: "Each square is one kill -9 of the real Whoosh daemon while it was downloading. After every one, Whoosh read its journal and carried on where it had stopped.",
-      gridLabel: "A grid of 1,000 squares, one for each kill. None left a broken file.",
+    power: {
+      title1: "The power can go.",
+      title2: "Your download won't.",
+      text: "Load-shedding, a crash, a closed laptop lid: Whoosh carries on from where it stopped, never from zero. We proved it the hard way, by killing Whoosh 1,000 times in the middle of downloads.",
+      barLabel: "A download bar: the power cuts out part of the way through, and the download carries on from the same point.",
+      cut: "power cut",
+      resume: "carries on from here",
       results: [
-        { value: "0", label: "corrupt files" },
-        { value: "0", label: "duplicate files" },
-        { value: "1,584", label: "downloads checked" },
+        { value: "1,000", label: "forced crashes, mid-download" },
+        { value: "0", label: "broken files" },
+        { value: "0", label: "files downloaded twice" },
       ],
-      why: "A power cut or load-shedding does the same thing to a download as kill -9. That is why Whoosh writes data to disk first and records it second.",
     },
-    featuresTitle: "What it does",
-    features: [
-      {
-        title: "Fast where it matters",
-        text: "HTTP/1.1, HTTP/2 and HTTP/3 with Happy Eyeballs. It starts on one connection, adds more only when they win, and remembers each server's limits.",
-      },
-      {
-        title: "Crash-proof",
-        text: "A write-ahead journal and power-safe finish: a power cut, load-shedding or a killed process never leaves a corrupt or duplicate file.",
-      },
-      {
-        title: "Handles difficult servers",
-        text: "Slow, stalling and flaky servers, expiring links, cookies and referers, servers without ranges, and Bangla and other Unicode file names.",
-      },
-      {
-        title: "Queues and a scheduler",
-        text: "Named queues, start and stop times, speed limits by time of day, and an optional sleep or shutdown when a queue finishes.",
-      },
-      {
-        title: "Browser integration",
-        text: "An extension for Firefox and Chromium-based browsers hands downloads to the app with their cookies, and finds a fresh link when an old one expires.",
-      },
-      {
-        title: "One engine, many clients",
-        text: "A local daemon with a token-protected API, used by the desktop app, the command line and the extension. Downloads keep going when the window is closed.",
-      },
-    ],
-    privacyTitle: "No ads. No tracking.",
-    privacyText:
-      "Whoosh sends nothing about you anywhere. Crash reports exist only if you turn them on.",
-    privacyLink: "Privacy",
-    langTitle: "বাংলা and English, and more",
-    langText:
-      "The app speaks Bangla and English, with more languages translated by the community.",
+    all: {
+      title1: "Download anything.",
+      title2: "Lose nothing.",
+      items: [
+        { title: "Big files", text: "Split across connections and put back together byte for byte. Pause tonight, carry on tomorrow." },
+        { title: "Video and audio", text: "The browser extension spots video and audio on a page and offers them to Whoosh." },
+        { title: "Slow, moody servers", text: "Servers that stall, drop the line or limit your speed. Whoosh waits, retries and works around the slow part." },
+        { title: "Links that expire", text: "When a download link runs out, the extension finds the fresh one and the download continues." },
+        { title: "Queues and a timetable", text: "Line downloads up, start them at night, cap the speed during the day, and let the computer sleep when the queue is done." },
+        { title: "বাংলা file names", text: "Bangla, or any other script, in file names, exactly as the site wrote them." },
+      ],
+    },
+    browser: {
+      title: "It lives in your browser too.",
+      text: "Click a download in Firefox, Edge, Chrome or Brave and Whoosh takes it from there, with the cookies the site needs.",
+      link: "About the extension",
+    },
+    honest: {
+      title: "No ads. No account. No tracking.",
+      text: "Whoosh is open source and sends nothing about you anywhere.",
+      link: "Privacy",
+    },
+    lang: {
+      title: "বাংলা and English",
+      text: "The whole app speaks both, and more languages are on the way.",
+    },
   },
   download: {
-    title: "Download",
-    lead: "Whoosh is not released yet. This page will list the installers for every platform once the first public beta is out.",
+    title: "Get Whoosh",
+    lead: "Not out yet. The first public beta is on its way, and this page will carry the installers for every system the day it lands.",
     platformsTitle: "Planned packages",
     platforms: [
       {
@@ -122,8 +108,8 @@ export const en = {
     sourceText: "The engine, daemon and command line build today on Linux, macOS and Windows.",
   },
   extension: {
-    title: "Browser extension",
-    lead: "The extension sends your browser's downloads to Whoosh, with the cookies and referer the site needs. It needs the Whoosh app installed and collects no data.",
+    title: "In your browser",
+    lead: "The extension hands your browser's downloads to Whoosh, with the cookies the site needs. It works together with the Whoosh app and collects no data.",
     browsersTitle: "Where to get it",
     browsers: [
       { name: "Firefox", text: "From Firefox Add-ons (AMO), once it is published there." },
@@ -143,8 +129,8 @@ export const en = {
     ],
   },
   benchmarks: {
-    title: "Benchmarks",
-    lead: "Every number comes from whoosh-bench, which runs Whoosh and other downloaders against a test server that throttles, drops, stalls, lies about ranges and redirects. The raw data of every run is public.",
+    title: "Speed tests",
+    lead: "We race Whoosh against other download managers on a test server built to misbehave: it slows down, drops the line, stalls and lies. Every result is public, including the ones we lose.",
     tableHead: ["", "Whoosh", "Best competitor"],
     rows: [
       ["Correct files", "175 / 175 runs byte-exact, 0 wrong names", "Gopeed: 14 corrupt files · Surge: 1"],
@@ -189,7 +175,7 @@ export const en = {
     ],
   },
   support: {
-    title: "Support Whoosh",
+    title: "Keep Whoosh going",
     text: "Whoosh is free and has no ads or tracking. If it saves you time, you can help keep it going.",
     sponsors: "GitHub Sponsors",
     coffee: "Buy Me a Coffee",
