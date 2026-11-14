@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import "@fontsource-variable/baloo-da-2";
 import "../styles/global.css";
+import Icon from "../components/Icon.astro";
 import { href, REPO, strings, type Lang, type Page } from "../i18n";
 
 interface Props {
@@ -47,6 +48,7 @@ const nav: [Page, string][] = [
     <meta name="theme-color" content="#2563eb" />
   </head>
   <body>
+    <div class="scrollbar" aria-hidden="true"><i></i></div>
     <a class="skip" href="#main">{t.nav.skip}</a>
     <header class="site-header">
       <div class="wrap">
@@ -61,7 +63,7 @@ const nav: [Page, string][] = [
           ))}
           <a href={REPO}>{t.nav.github}</a>
           <a href={href(other, page)} hreflang={other} lang={other}>{t.nav.language}</a>
-          <a class="nav-cta" href={href(lang, "download")}>{t.nav.cta}</a>
+          <a class="nav-cta" href={href(lang, "download")}><Icon name="download" class="drop" />{t.nav.cta}</a>
         </nav>
       </div>
     </header>
@@ -141,18 +143,34 @@ const nav: [Page, string][] = [
         };
         requestAnimationFrame(tick);
       }
-      // Fills to the cut, waits as if the power were out, then carries on.
+      // Fills to the cut, the power goes out (the lit part dims, a bolt strikes), then it carries on.
       function power(el: HTMLElement) {
         const cells = [...el.querySelectorAll("i")];
         const cut = Number(el.dataset.cut);
+        const box = el.closest(".power");
         const per = 28;
-        const pause = 700;
+        const pause = 900;
         cells.forEach((cell, i) => {
           setTimeout(() => {
             cell.classList.add("on");
             if (i === cells.length - 1) el.classList.remove("js-play");
           }, i * per + (i >= cut ? pause : 0));
         });
+        setTimeout(() => box?.classList.add("is-out", "struck"), cut * per);
+        setTimeout(() => box?.classList.remove("is-out"), cut * per + pause);
+      }
+
+      // The page's own download bar: how far you have scrolled.
+      const bar = document.querySelector<HTMLElement>(".scrollbar i");
+      if (bar) {
+        let queued = false;
+        const paint = () => {
+          queued = false;
+          const max = document.documentElement.scrollHeight - innerHeight;
+          bar.style.transform = `scaleX(${max > 0 ? Math.min(1, scrollY / max) : 0})`;
+        };
+        addEventListener("scroll", () => { if (!queued) { queued = true; requestAnimationFrame(paint); } }, { passive: true });
+        paint();
       }
     </script>
   </body>

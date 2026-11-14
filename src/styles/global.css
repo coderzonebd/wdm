@@ -276,3 +276,80 @@ details p { margin-top: var(--s2); color: var(--ink-2); max-width: 42em; }
 .brand img { transition: transform var(--base) var(--ease); }
 .brand:hover img { transform: rotate(-8deg) scale(1.08); }
 .chart.panel.js-play, .chart.panel.js-played { transition: transform var(--base) var(--ease), box-shadow var(--base) var(--ease); }
+
+/* ---------- icons and tiles ---------- */
+.ico { inline-size: 1.25em; block-size: 1.25em; flex: none; display: inline-block; vertical-align: -0.25em; }
+.btn, .pill, .nav .nav-cta { display: inline-flex; align-items: center; gap: var(--s1); }
+.btn .ico, .nav-cta .ico { overflow: visible; }
+.tile { display: grid; place-items: center; inline-size: var(--s8); block-size: var(--s8); flex: none; border: var(--edge) solid var(--navy); border-radius: var(--r-small); background: var(--yellow); color: var(--navy); box-shadow: 0 0.25rem 0 var(--navy); transition: transform var(--base) var(--ease), box-shadow var(--base) var(--ease); }
+.tile .ico { inline-size: 1.75rem; block-size: 1.75rem; }
+.tile--sky { background: var(--sky); border-color: var(--white); box-shadow: 0 0.25rem 0 var(--white); color: var(--navy); }
+.tile--white { background: var(--white); }
+.tile--sm { display: inline-grid; inline-size: var(--s4); block-size: var(--s4); margin-inline-end: var(--s2); vertical-align: middle; box-shadow: 0 0.1875rem 0 var(--navy); border-width: 2px; }
+.tile--sm .ico { inline-size: 1.125rem; block-size: 1.125rem; }
+.glyph { font-weight: 800; font-size: 1.75rem; line-height: 1; }
+li:hover > .tile, div:hover > .tile, dt:hover > .tile { transform: rotate(-6deg) translateY(-0.125rem); box-shadow: 0 0.375rem 0 var(--navy); }
+li:hover > .tile--sky { box-shadow: 0 0.375rem 0 var(--white); }
+
+.features li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s3); align-items: start; padding-inline-start: 0; border-inline-start: 0; }
+.features li:hover { transform: none; }
+.results li { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: var(--s3); align-items: center; }
+.results li > span:last-child { display: block; }
+.duo .tile { margin-bottom: var(--s2); }
+.go { display: inline-flex; align-items: center; gap: var(--s1); font-weight: 700; }
+.go .ico { transition: transform var(--base) var(--ease); }
+.go:hover .ico { transform: translateX(0.375rem); }
+:dir(rtl) .go .ico { transform: scaleX(-1); }
+
+/* ---------- the page's download bar ---------- */
+.scrollbar { position: fixed; inset: 0 0 auto 0; block-size: 0.3125rem; z-index: 10; pointer-events: none; }
+.scrollbar i { display: block; block-size: 100%; background: var(--yellow); border-end-end-radius: var(--r-pill); transform: scaleX(0); transform-origin: left center; box-shadow: 0 1px 0 var(--navy); }
+
+/* ---------- ticker of the three lines ---------- */
+.ticker { background: var(--navy); color: var(--yellow); overflow: hidden; border-block: var(--edge) solid var(--navy); padding-block: var(--s2); font-weight: 800; font-size: clamp(1.25rem, 2.4vw, 1.875rem); line-height: 1.2; white-space: nowrap; }
+.ticker-run { display: inline-flex; gap: var(--s6); padding-inline-start: var(--s6); }
+.ticker-run span { display: inline-flex; align-items: center; gap: var(--s6); }
+.ticker-run .ico { color: var(--sky); }
+@keyframes ticker { to { transform: translateX(-50%); } }
+.js .ticker-run { animation: ticker 28s linear infinite; }
+.ticker:hover .ticker-run { animation-play-state: paused; }
+
+/* ---------- signature motion ---------- */
+@keyframes whoosh { 0% { opacity: 0; transform: translateX(-4rem) skewX(-10deg); } 60% { opacity: 1; transform: translateX(0.5rem) skewX(2deg); } 100% { opacity: 1; transform: none; } }
+@keyframes whoosh-right { 0% { opacity: 0; transform: translateX(6rem) skewX(6deg); } 60% { opacity: 1; transform: translateX(-0.5rem) skewX(-1deg); } 100% { opacity: 1; transform: none; } }
+@keyframes gust { from { transform: scaleX(0); } to { transform: scaleX(1); } }
+@keyframes drop { 0% { transform: none; opacity: 1; } 45% { transform: translateY(0.5rem); opacity: 0; } 55% { transform: translateY(-0.5rem); opacity: 0; } 100% { transform: none; opacity: 1; } }
+@keyframes beat { 0%, 100% { transform: none; } 30% { transform: scale(1.25); } 60% { transform: scale(0.95); } }
+@keyframes strike { 0% { opacity: 0; transform: scale(0.2) rotate(-20deg); } 55% { opacity: 1; transform: scale(1.35) rotate(6deg); } 100% { opacity: 1; transform: none; } }
+
+/* headings arrive like a gust from the left, then a streak draws under them */
+.js [data-reveal="whoosh"] { opacity: 0; transform: none; transition: none; }
+.js [data-reveal="whoosh"].in { animation: whoosh 800ms var(--ease) both; }
+.js [data-reveal="right"], .js .hero-shot[data-reveal] { opacity: 0; transform: none; transition: none; }
+.js [data-reveal="right"].in { animation: whoosh-right 900ms var(--ease) both; animation-delay: 500ms; }
+h2[data-reveal="whoosh"] { position: relative; padding-bottom: var(--s3); }
+h2[data-reveal="whoosh"]::after { content: ""; position: absolute; inset-inline-start: 0; bottom: 0; inline-size: 6rem; block-size: 0.5rem; border-radius: var(--r-pill); background: var(--yellow); transform-origin: left center; }
+.band--paper h2[data-reveal="whoosh"]::after, .band:not([class*="band--"]) h2[data-reveal="whoosh"]::after { background: var(--blue); }
+.band--yellow h2[data-reveal="whoosh"]::after { background: var(--navy); }
+.js h2[data-reveal="whoosh"]::after { transform: scaleX(0); }
+.js h2[data-reveal="whoosh"].in::after { animation: gust 600ms var(--ease) both; animation-delay: 550ms; }
+
+/* icons inside buttons do their job on hover */
+.btn:hover .drop, .nav-cta:hover .drop { animation: drop 600ms var(--ease); }
+.btn:hover .beat { animation: beat 600ms var(--ease); }
+.grow { transition: transform var(--base) var(--ease); transform-origin: bottom center; }
+.btn:hover .grow { transform: scaleY(1.2); }
+
+/* the power cut: the lit part dims, a bolt strikes at the cut, then it carries on */
+.power { position: relative; margin-top: var(--s8); }
+.power .power-bar { margin-top: 0; transition: opacity var(--base) var(--ease); }
+.power-bolt { position: absolute; inset-inline-start: 62.5%; bottom: calc(100% - var(--s2)); translate: -50% 0; display: grid; place-items: center; inline-size: var(--s6); block-size: var(--s6); border-radius: var(--r-pill); background: var(--yellow); color: var(--navy); border: var(--edge) solid var(--white); z-index: 1; }
+.power-bolt .ico { inline-size: 1.5rem; block-size: 1.5rem; fill: currentColor; }
+.js .power-bolt { opacity: 0; }
+.js .power.struck .power-bolt { animation: strike 500ms var(--ease) both; }
+.power.is-out .power-bar { opacity: 0.35; }
+.power-notes { margin-top: var(--s2); }
+
+@media (prefers-reduced-motion: reduce) {
+  .ticker-run { animation: none; }
+}

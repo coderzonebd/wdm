@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import Base from "../layouts/Base.astro";
 import PageHead from "./PageHead.astro";
+import Icon from "./Icon.astro";
 import { strings, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -11,7 +12,7 @@ const p = strings[lang].privacy;
   <PageHead title={p.title} lead={p.updated} />
   <div class="page-body"><div class="wrap">
     <dl class="rows" data-reveal>
-      {p.sections.map((s) => <div><dt>{s.h}</dt><dd>{s.p}</dd></div>)}
+      {p.sections.map((s) => <div><dt><span class="tile tile--sm"><Icon name="lock" /></span>{s.h}</dt><dd>{s.p}</dd></div>)}
     </dl>
   </div></div>
 </Base>

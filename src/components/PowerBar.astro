@@ -1,11 +1,15 @@
 ---
 // SPDX-License-Identifier: GPL-3.0-or-later
 // A download bar that loses power part of the way and carries on from there.
+import Icon from "./Icon.astro";
 interface Props { label: string; cut: string; resume: string }
 const { label, cut, resume } = Astro.props;
 const TOTAL = 48, CUT = 30;
 ---
-<div class="power-bar" data-play="power" data-cut={CUT} role="img" aria-label={label}>
-  {Array.from({ length: TOTAL }, (_, i) => <i class={i >= CUT ? "after" : undefined}></i>)}
+<div class="power">
+  <span class="power-bolt" aria-hidden="true"><Icon name="bolt" /></span>
+  <div class="power-bar" data-play="power" data-cut={CUT} role="img" aria-label={label}>
+    {Array.from({ length: TOTAL }, (_, i) => <i class={i >= CUT ? "after" : undefined}></i>)}
+  </div>
+  <p class="power-notes" aria-hidden="true"><span>{cut}</span><span>{resume}</span></p>
 </div>
-<p class="power-notes" aria-hidden="true"><span>{cut}</span><span>{resume}</span></p>

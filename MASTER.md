@@ -39,3 +39,20 @@ Baloo Da 2 Variable (400–800), self-hosted through Fontsource; fallback `"Nirm
 ## Motion
 
 `--fast` 120ms, `--base` 200ms, `--draw` 700ms; `--ease` cubic-bezier(0.2, 0.8, 0.2, 1). Power bar: 28ms per segment, 700ms pause at the cut. Entrances `rise` 700ms with a 90ms stagger, `fill` 900ms, `draw` 1800ms; streaks 6–9s linear, looping; reveals 700ms with an 80ms stagger; count-up 1200ms. With reduced motion or without JavaScript nothing moves and everything is shown in its final state.
+
+## Icons
+
+`src/components/Icon.astro`: the site's own line icons on a 24px grid, 2.2px stroke, round caps, like the logo's wind lines. They sit in buttons and pills, and in "tiles" (a yellow, sky or white square with a navy outline and a hard shadow) beside features, results and list rows. Platforms use generic marks (four panes, a laptop, a terminal prompt, a globe), not the vendors' logos.
+
+## Signature motion
+
+Added at the owner's request for motion that belongs to Whoosh:
+
+- **Gust.** Section headings arrive from the left with a skew (`whoosh`, 800ms), and a short streak then draws under them (`gust`, 600ms). The screenshot arrives from the right (`whoosh-right`, 900ms).
+- **Wind.** Five streaks of different lengths cross the hero on a loop.
+- **Power cut.** The download bar fills to the cut; the lit part dims and a bolt strikes (`strike`, 500ms); after 900ms the bar carries on in yellow.
+- **The page's download bar.** A thin yellow bar at the top fills as you scroll.
+- **Ticker.** The three taglines run across a navy strip (28s loop, pauses on hover).
+- **Icons at work.** On hover the download arrow drops into its tray, the heart beats, the chart grows, arrows step forward, tiles tilt.
+
+Allowed patterns, in addition to the list above: the ticker loop; the scroll progress bar; icon tiles. With reduced motion or without JavaScript none of this runs and everything is shown in place.

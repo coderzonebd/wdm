@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import Base from "../layouts/Base.astro";
 import PageHead from "./PageHead.astro";
+import Icon from "./Icon.astro";
 import { strings, type Lang } from "../i18n";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
@@ -14,7 +15,7 @@ const e = strings[lang].extension;
     <ul class="bullets prose" data-reveal>{e.features.map((f) => <li>{f}</li>)}</ul>
     <h2>{e.browsersTitle}</h2>
     <dl class="rows" data-reveal>
-      {e.browsers.map((b) => <div><dt>{b.name}</dt><dd>{b.text}</dd></div>)}
+      {e.browsers.map((b) => <div><dt><span class="tile tile--sm"><Icon name="globe" /></span>{b.name}</dt><dd>{b.text}</dd></div>)}
     </dl>
   </div></div>
 </Base>

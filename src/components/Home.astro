@@ -2,6 +2,7 @@
 // SPDX-License-Identifier: GPL-3.0-or-later
 import Base from "../layouts/Base.astro";
 import Chart from "./Chart.astro";
+import Icon, { type IconName } from "./Icon.astro";
 import PowerBar from "./PowerBar.astro";
 import Wind from "./Wind.astro";
 import { href, strings, type Lang } from "../i18n";
@@ -11,20 +12,25 @@ const t = strings[lang];
 const h = t.home;
 const base = import.meta.env.BASE_URL.replace(/\/?$/, "/");
 const shot = (x: 1 | 2) => `${base}shots/app-${lang}-light${x === 1 ? "-1x" : ""}.webp`;
+const platformIcons: IconName[] = ["windows", "laptop", "terminal", "globe"];
+const featureIcons: (IconName | "bn")[] = ["file", "play", "hourglass", "link", "calendar", "bn"];
+const resultIcons: IconName[] = ["bolt", "shield", "copy"];
+const streaks = [["12%", "7s", "0s", "9rem", "0.375rem"], ["30%", "5s", "1.5s", "5rem", "0.25rem"], ["48%", "9s", "2.5s", "14rem", "0.5rem"], ["66%", "6s", "4s", "7rem", "0.25rem"], ["84%", "8s", "0.8s", "11rem", "0.375rem"]];
+const ticker = [`${h.title1} ${h.title2}`, `${h.power.title1} ${h.power.title2}`, `${h.all.title1} ${h.all.title2}`];
 ---
 <Base lang={lang} page="home">
   <section class="hero">
-    <div class="hero-clip"><Wind />{[["18%", "7s", "0s", "9rem"], ["46%", "9s", "2.5s", "14rem"], ["71%", "6s", "4s", "7rem"]].map(([top, d, w, len]) => <span class="streak" style={`top:${top};width:${len};--d:${d};--w:${w}`}></span>)}</div>
+    <div class="hero-clip"><Wind />{streaks.map(([top, d, w, len, thick]) => <span class="streak" style={`top:${top};width:${len};height:${thick};--d:${d};--w:${w}`}></span>)}</div>
     <div class="wrap">
       <p class="pill enter">{h.soon}</p>
       <h1 class="display"><span class="enter" style="--i:1;display:inline-block">{h.title1}</span><br /><span class="hl fill">{h.title2}</span></h1>
       <p class="lead soft enter" style="--i:4">{h.lead}</p>
       <div class="actions enter" style="--i:5">
-        <a class="btn" href={href(lang, "download")}>{h.cta}</a>
-        <a class="btn btn--white" href={href(lang, "benchmarks")}>{h.cta2}</a>
+        <a class="btn" href={href(lang, "download")}><Icon name="download" class="drop" />{h.cta}</a>
+        <a class="btn btn--white" href={href(lang, "benchmarks")}><Icon name="chart" class="grow" />{h.cta2}</a>
       </div>
-      <ul class="pills enter" style="--i:6">{h.platforms.map((p) => <li class="pill">{p}</li>)}</ul>
-      <figure class="hero-shot" data-reveal>
+      <ul class="pills enter" style="--i:6">{h.platforms.map((p, i) => <li class="pill"><Icon name={platformIcons[i] ?? "globe"} />{p}</li>)}</ul>
+      <figure class="hero-shot" data-reveal="right">
         <div class="frame">
           <img src={shot(1)} srcset={`${shot(1)} 1240w, ${shot(2)} 2480w`} sizes="(max-width: 82rem) 92vw, 73rem" width="1240" height="760" alt={h.shot.alt} />
         </div>
@@ -37,10 +43,10 @@ const shot = (x: 1 | 2) => `${base}shots/app-${lang}-light${x === 1 ? "-1x" : ""
       <p class="caption muted small">{h.shot.caption}</p>
     </div>
     <div class="wrap split" style="margin-top:var(--s12)">
-      <div data-reveal>
-        <h2>{h.fast.title}</h2>
-        <p class="lead muted">{h.fast.text}</p>
-        <p><a href={href(lang, "benchmarks")}>{h.fast.link}</a></p>
+      <div>
+        <h2 data-reveal="whoosh">{h.fast.title}</h2>
+        <p class="lead muted" data-reveal style="--i:1">{h.fast.text}</p>
+        <p data-reveal style="--i:2"><a class="go" href={href(lang, "benchmarks")}>{h.fast.link}<Icon name="arrow" /></a></p>
       </div>
       <Chart lang={lang} />
     </div>
@@ -48,46 +54,57 @@ const shot = (x: 1 | 2) => `${base}shots/app-${lang}-light${x === 1 ? "-1x" : ""
 
   <section class="band band--navy">
     <div class="wrap">
-      <h2 class="page-title" data-reveal>{h.power.title1}<br /><span class="hl">{h.power.title2}</span></h2>
+      <h2 class="page-title" data-reveal="whoosh">{h.power.title1}<br /><span class="hl">{h.power.title2}</span></h2>
       <p class="lead soft" style="margin-top:var(--s4)" data-reveal>{h.power.text}</p>
       <PowerBar label={h.power.barLabel} cut={h.power.cut} resume={h.power.resume} />
       <ul class="results">
-        {h.power.results.map((r, i) => <li data-reveal style={`--i:${i}`}><span class="figure" data-count={i === 0 ? "1000" : undefined}>{r.value}</span><span class="soft">{r.label}</span></li>)}
+        {h.power.results.map((r, i) => <li data-reveal style={`--i:${i}`}><span class="tile tile--sky"><Icon name={resultIcons[i] ?? "check"} /></span><span><span class="figure" data-count={i === 0 ? "1000" : undefined}>{r.value}</span><span class="soft">{r.label}</span></span></li>)}
       </ul>
     </div>
   </section>
 
   <section class="band">
     <div class="wrap">
-      <h2 class="page-title" data-reveal>{h.all.title1}<br /><span class="hl-blue">{h.all.title2}</span></h2>
+      <h2 class="page-title" data-reveal="whoosh">{h.all.title1}<br /><span class="hl-blue">{h.all.title2}</span></h2>
       <ul class="features">
-        {h.all.items.map((f, i) => <li data-reveal style={`--i:${i % 2}`}><h3>{f.title}</h3><p>{f.text}</p></li>)}
+        {h.all.items.map((f, i) => (
+          <li data-reveal style={`--i:${i % 2}`}>
+            <span class="tile">{featureIcons[i] === "bn" ? <span class="glyph" lang="bn">অ</span> : <Icon name={(featureIcons[i] as IconName) ?? "check"} />}</span>
+            <div><h3>{f.title}</h3><p>{f.text}</p></div>
+          </li>
+        ))}
       </ul>
     </div>
   </section>
 
   <section class="band band--yellow">
     <div class="wrap split">
-      <div data-reveal>
-        <h2>{h.browser.title}</h2>
-        <p class="lead">{h.browser.text}</p>
-        <p><a href={href(lang, "extension")}>{h.browser.link}</a></p>
+      <div>
+        <h2 data-reveal="whoosh">{h.browser.title}</h2>
+        <p class="lead" data-reveal style="--i:1">{h.browser.text}</p>
+        <p data-reveal style="--i:2"><a class="go" href={href(lang, "extension")}>{h.browser.link}<Icon name="arrow" /></a></p>
       </div>
-      <div class="duo" data-reveal style="--i:1">
-        <div><h3>{h.honest.title}</h3><p>{h.honest.text} <a href={href(lang, "privacy")}>{h.honest.link}</a></p></div>
-        <div><h3>{h.lang.title}</h3><p>{h.lang.text}</p></div>
+      <div class="duo">
+        <div data-reveal style="--i:1"><span class="tile tile--white"><Icon name="eyeoff" /></span><h3>{h.honest.title}</h3><p>{h.honest.text} <a href={href(lang, "privacy")}>{h.honest.link}</a></p></div>
+        <div data-reveal style="--i:2"><span class="tile tile--white"><span class="glyph" lang="bn">অ</span></span><h3>{h.lang.title}</h3><p>{h.lang.text}</p></div>
       </div>
     </div>
   </section>
+
+  <div class="ticker" aria-hidden="true">
+    <div class="ticker-run">
+      {[0, 1].map(() => ticker.map((line) => <span>{line}<Icon name="bolt" /></span>))}
+    </div>
+  </div>
 
   <section class="band band--blue closing" id="support">
     <div class="wrap" data-reveal>
       <h2 class="page-title">{h.title1}<br /><span class="hl">{h.title2}</span></h2>
       <p class="lead soft">{t.support.text}</p>
       <div class="actions">
-        <a class="btn" href={href(lang, "download")}>{h.cta}</a>
-        <a class="btn btn--white" href="https://github.com/sponsors/coderzonebd">{t.support.sponsors}</a>
-        <a class="btn btn--white" href="https://buymeacoffee.com/devrkb21">{t.support.coffee}</a>
+        <a class="btn" href={href(lang, "download")}><Icon name="download" class="drop" />{h.cta}</a>
+        <a class="btn btn--white" href="https://github.com/sponsors/coderzonebd"><Icon name="heart" class="beat" />{t.support.sponsors}</a>
+        <a class="btn btn--white" href="https://buymeacoffee.com/devrkb21"><Icon name="coffee" />{t.support.coffee}</a>
       </div>
     </div>
   </section>
