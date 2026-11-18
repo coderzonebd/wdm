@@ -101,7 +101,7 @@ h3 { font-size: var(--t-h3); line-height: 1.2; font-weight: 700; }
 /* One button for links and <button>s: the site's font (a <button> does not inherit it), centred
    text that may wrap on a phone, at least 48px tall for a thumb. Three sizes: --sm (a copy
    button), the default, --lg (the one main action on a page). */
-.btn { display: inline-block; min-block-size: 3rem; padding: var(--s1) var(--s4); border-radius: var(--r-pill); background: var(--yellow); color: var(--navy); font-family: inherit; font-weight: 700; font-size: 1.25rem; line-height: 1.2; text-align: center; text-decoration: none; border: var(--edge) solid var(--navy); box-shadow: var(--drop-btn); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease), background-color var(--fast) var(--ease); }
+.btn { display: inline-block; min-block-size: 3rem; padding: var(--s1) var(--s4); border-radius: var(--r-pill); background: var(--yellow); color: var(--navy); font-family: inherit; font-weight: 700; font-size: 1.25rem; line-height: 1.2; text-align: center; white-space: nowrap; text-decoration: none; border: var(--edge) solid var(--navy); box-shadow: var(--drop-btn); cursor: pointer; -webkit-tap-highlight-color: transparent; transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease), background-color var(--fast) var(--ease); }
 .btn:hover { transform: translateY(-0.125rem); box-shadow: 0 0.5rem 0 var(--navy); }
 .btn:active { transform: translateY(0.25rem); box-shadow: 0 0.125rem 0 var(--navy); }
 .btn:focus-visible { outline-offset: 5px; }

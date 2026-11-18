@@ -17,7 +17,11 @@ const got = files(release);
 const icons: Record<string, IconName> = { windows: "windows", mac: "laptop", linux: "terminal", android: "phone" };
 const fill = (text: string, key: string, value: string) => text.replace(`{${key}}`, value);
 const osNames = d.osNames as Record<string, string>;
-const [unixCmd, windowsCmd] = d.commands;
+// The install script, served by this site (the deploy workflow copies it from the app's
+// repository), so the commands are short enough for one line.
+const script = new URL(`${import.meta.env.BASE_URL.replace(/\/?$/, "/")}install.txt`, Astro.site).href;
+const commands = d.commands.map((c) => ({ ...c, code: c.code.replace("{script}", script) }));
+const [unixCmd, windowsCmd] = commands;
 
 /** The visitor's system → the file of the big button, and its install command. */
 const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[] = [
@@ -43,11 +47,19 @@ const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[
           const a = got[p.kind]!;
           return (
             <div class="get-one" data-os={p.os} hidden>
-              <a class="btn btn--lg" href={a.url}><Icon name="download" class="drop" />{fill(d.forYou, "os", osNames[p.os] ?? p.os)}</a>
-              <p class="muted">{d.picked} {a.name} · {num(lang, size(a.size))}</p>
+              <div class="get-main">
+                <a class="dl" href={a.url}>
+                  <Icon name="download" class="drop" />
+                  <span class="dl-text">
+                    <span class="dl-word">{d.downloadWord}</span>
+                    <span class="dl-for">{fill(d.forYou, "os", osNames[p.os] ?? p.os)} · {num(lang, size(a.size))}</span>
+                  </span>
+                </a>
+                <p class="muted get-picked">{d.picked}</p>
+              </div>
               {p.cmd && (
                 <div class="get-cmd">
-                  <p><strong>{d.orCommand}</strong> <span class="muted">({p.cmd.name})</span></p>
+                  <p class="get-cmd-title"><strong>{d.orCommand}</strong></p>
                   <div class="cmd-box">
                     <pre><code>{p.cmd.code}</code></pre>
                     <button class="btn btn--white btn--sm" type="button" data-copy={p.cmd.code} data-done={d.copied}><Icon name="copy" /><span>{d.copy}</span></button>
@@ -106,7 +118,7 @@ const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[
     <h2>{d.commandTitle}</h2>
     <p class="prose muted">{d.commandText}</p>
     <div class="cmds">
-      {d.commands.map((c, i) => (
+      {commands.map((c, i) => (
         <section class="cmd">
           <h3><span class="tile tile--sm"><Icon name={i === 0 ? "terminal" : "windows"} /></span>{c.name}</h3>
           <div class="cmd-box"><pre><code>{c.code}</code></pre><button class="btn btn--white btn--sm" type="button" data-copy={c.code} data-done={d.copied}><Icon name="copy" /><span>{d.copy}</span></button></div>
@@ -187,25 +199,40 @@ const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[
 </script>
 
 <style>
-  .get { display: grid; gap: var(--s3); justify-items: start; }
-  .get-version { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s1) var(--s2); margin: 0; font-size: var(--t-h3); }
-  .get-one { display: grid; gap: var(--s2); justify-items: start; width: 100%; }
+  .get { display: grid; gap: var(--s4); }
+  .get-version { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s1) var(--s2); margin: 0; font-size: 1.25rem; }
+  .get-version .muted { font-weight: 500; }
+
+  /* The visitor's download beside its one-line installer; stacked on a narrow screen. */
+  .get-one { display: grid; gap: var(--s4); }
   .get-one[hidden] { display: none; }
-  .get-one > p { margin: 0; font-size: var(--t-small); overflow-wrap: anywhere; }
-  .get-cmd { display: grid; gap: var(--s1); width: 100%; margin-top: var(--s2); padding-top: var(--s3); border-top: 2px solid var(--line); }
-  .get-cmd p { margin: 0; }
-  .get-links { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); margin: 0; font-weight: 700; }
-  .get--none .get-links a:first-child { font-size: var(--t-h3); }
+  .get-main { display: grid; gap: var(--s1); justify-items: start; }
+  .get-picked { margin: 0; font-size: var(--t-small); }
+
+  /* The big download button: one word large, what it is for small beneath, never broken
+     across lines. */
+  .dl { display: inline-flex; align-items: center; gap: var(--s2); max-width: 100%; padding: var(--s2) var(--s4) var(--s2) var(--s3); border: var(--edge) solid var(--navy); border-radius: var(--r-panel); background: var(--yellow); color: var(--navy); text-decoration: none; box-shadow: var(--drop-btn); transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease); }
+  .dl:hover { transform: translateY(-0.125rem); box-shadow: 0 0.5rem 0 var(--navy); }
+  .dl:active { transform: translateY(0.25rem); box-shadow: 0 0.125rem 0 var(--navy); }
+  .dl:focus-visible { outline-offset: 5px; }
+  .dl .ico { inline-size: 2.25rem; block-size: 2.25rem; padding: 0.375rem; border-radius: 50%; background: var(--navy); color: var(--yellow); }
+  .dl-text { display: grid; min-width: 0; }
+  .dl-word { font-size: clamp(1.5rem, 3vw, 2rem); font-weight: 800; line-height: 1.05; }
+  .dl-for { font-size: var(--t-small); font-weight: 700; line-height: 1.3; white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
+  @media (max-width: 48rem) { .dl { width: 100%; } }
+
+  .get-cmd { display: grid; gap: var(--s1); min-width: 0; }
+  .get-cmd-title { margin: 0; font-size: var(--t-small); }
+  .get-links { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); margin: 0; padding-top: var(--s3); border-top: 2px solid var(--line); font-weight: 700; font-size: var(--t-small); }
+  .get--none .get-links { border-top: 0; padding-top: 0; font-size: 1.25rem; }
 
   /* A command shown whole (it wraps instead of scrolling sideways), with its copy button in
      the box's corner; on a phone the button goes under it. */
-  .cmd-box { position: relative; width: 100%; }
-  .cmd-box pre { margin: 0; padding-inline-end: 8.5rem; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
-  .cmd-box .btn { position: absolute; inset-block-start: var(--s2); inset-inline-end: var(--s2); }
-  @media (max-width: 48rem) {
-    .cmd-box pre { padding-inline-end: var(--s3); }
-    .cmd-box .btn { position: static; margin-top: var(--s2); }
-  }
+  /* A command is one line: on a screen too narrow for it, it scrolls sideways; the copy button
+     sits beside it. */
+  .cmd-box { display: flex; align-items: center; gap: var(--s2); width: 100%; padding: var(--s1) var(--s1) var(--s1) var(--s3); border: var(--edge) solid var(--navy); border-radius: var(--r-small); background: var(--white); }
+  .cmd-box pre { flex: 1; min-width: 0; margin: 0; padding: var(--s1) 0; border: 0; border-radius: 0; background: none; white-space: pre; overflow-x: auto; scrollbar-width: thin; line-height: 1.5; }
+  .cmd-box .btn { flex: none; }
   .cmds { display: grid; gap: var(--s4); }
   .cmd h3 { display: flex; align-items: center; margin: 0 0 var(--s2); font-size: var(--t-h3); }
 
@@ -219,6 +246,7 @@ const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[
   .file:hover { transform: translateY(-0.125rem); box-shadow: 0 0.3125rem 0 var(--navy); background: var(--paper); }
   .file:active { transform: translateY(0.125rem); box-shadow: 0 0.0625rem 0 var(--navy); }
   .file:focus-visible { outline-offset: 3px; }
+  .file-name { white-space: nowrap; overflow: hidden; text-overflow: ellipsis; }
   .file-size { font-size: var(--t-small); font-weight: 600; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
   .system details { font-size: var(--t-small); border: 0; padding: 0; margin: var(--s1) 0 0 var(--s1); background: none; box-shadow: none; }
   .system summary { font-size: var(--t-small); font-weight: 700; color: var(--ink-2); }

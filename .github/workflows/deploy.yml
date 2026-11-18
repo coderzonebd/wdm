@@ -36,6 +36,10 @@ jobs:
           node-version: 22
           cache: pnpm
       - run: pnpm install --frozen-lockfile
+      - name: The install script, served by the site
+        # One file is both a shell and a PowerShell script (packaging/install/install in the app's
+        # repository); as .txt GitHub Pages serves it as text/plain, which curl and irm both take.
+        run: curl -fsSL --retry 3 https://raw.githubusercontent.com/coderzonebd/whoosh-download-manager/pub/packaging/install/install -o public/install.txt
       - run: pnpm check
       - run: pnpm build
         env:
