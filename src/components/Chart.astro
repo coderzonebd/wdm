@@ -15,7 +15,7 @@ const sec = (v: number) => `${num(lang, v.toFixed(3))} ${c.sec}`;
   {CHART.map((r, i) => (
     <div class="chart-case">
       <p>{c.cases[i]}</p>
-      <div class="chart-row"><b>Whoosh</b><span class="chart-track"><span class="bar is-whoosh" style={`width:${pct(r.whoosh)}`}></span><b>{sec(r.whoosh)}</b></span></div>
+      <div class="chart-row"><b>WDM</b><span class="chart-track"><span class="bar is-whoosh" style={`width:${pct(r.whoosh)}`}></span><b>{sec(r.whoosh)}</b></span></div>
       <div class="chart-row"><span class="muted">{r.otherName}</span><span class="chart-track"><span class="bar" style={`width:${pct(r.other)}`}></span><span class="muted">{sec(r.other)}</span></span></div>
     </div>
   ))}
