@@ -241,7 +241,7 @@ export const en = {
     other: "Starring the repository, reporting bugs and translating help too.",
   },
   footer: {
-    made: "Made by CoderZone BD and contributors.",
+    made: "Made by Coder Zone BD and contributors.",
     license: "Open source under Apache-2.0 and GPL-3.0-or-later.",
     privacy: "Privacy",
   },
