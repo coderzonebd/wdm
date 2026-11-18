@@ -43,13 +43,15 @@ const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[
           const a = got[p.kind]!;
           return (
             <div class="get-one" data-os={p.os} hidden>
-              <a class="btn btn--big" href={a.url}><Icon name="download" class="drop" />{fill(d.forYou, "os", osNames[p.os] ?? p.os)}</a>
+              <a class="btn btn--lg" href={a.url}><Icon name="download" class="drop" />{fill(d.forYou, "os", osNames[p.os] ?? p.os)}</a>
               <p class="muted">{d.picked} {a.name} · {num(lang, size(a.size))}</p>
               {p.cmd && (
                 <div class="get-cmd">
-                  <p><strong>{d.orCommand}</strong> ({p.cmd.name})</p>
-                  <pre><code>{p.cmd.code}</code></pre>
-                  <button class="btn btn--white btn--small" type="button" data-copy={p.cmd.code} data-done={d.copied}><Icon name="copy" /><span>{d.copy}</span></button>
+                  <p><strong>{d.orCommand}</strong> <span class="muted">({p.cmd.name})</span></p>
+                  <div class="cmd-box">
+                    <pre><code>{p.cmd.code}</code></pre>
+                    <button class="btn btn--white btn--sm" type="button" data-copy={p.cmd.code} data-done={d.copied}><Icon name="copy" /><span>{d.copy}</span></button>
+                  </div>
                 </div>
               )}
             </div>
@@ -64,7 +66,7 @@ const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[
     ) : (
       <section class="get panel">
         <p>{d.unavailable}</p>
-        <a class="btn" href={`${REPO}/releases`}><Icon name="download" class="drop" />{d.releasesPage}</a>
+        <a class="btn btn--lg" href={`${REPO}/releases`}><Icon name="download" class="drop" />{d.releasesPage}</a>
       </section>
     )}
 
@@ -84,8 +86,11 @@ const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[
                     const a = got[f.kind as Kind]!;
                     return (
                       <li>
-                        <a href={a.url}><Icon name="download" />{f.label}</a>
-                        <span class="muted">{num(lang, size(a.size))}</span>
+                        <a class="file" href={a.url}>
+                          <Icon name="download" class="drop" />
+                          <span class="file-name">{f.label}</span>
+                          <span class="file-size">{num(lang, size(a.size))}</span>
+                        </a>
                         {a.sha256 && <details><summary>{d.sha}</summary><code>{a.sha256}</code></details>}
                       </li>
                     );
@@ -100,14 +105,14 @@ const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[
 
     <h2>{d.commandTitle}</h2>
     <p class="prose muted">{d.commandText}</p>
-    <dl class="rows">
-      {d.commands.map((c) => (
-        <div>
-          <dt>{c.name}</dt>
-          <dd class="cmd"><pre><code>{c.code}</code></pre><button class="btn btn--white btn--small" type="button" data-copy={c.code} data-done={d.copied}><Icon name="copy" /><span>{d.copy}</span></button></dd>
-        </div>
+    <div class="cmds">
+      {d.commands.map((c, i) => (
+        <section class="cmd">
+          <h3><span class="tile tile--sm"><Icon name={i === 0 ? "terminal" : "windows"} /></span>{c.name}</h3>
+          <div class="cmd-box"><pre><code>{c.code}</code></pre><button class="btn btn--white btn--sm" type="button" data-copy={c.code} data-done={d.copied}><Icon name="copy" /><span>{d.copy}</span></button></div>
+        </section>
       ))}
-    </dl>
+    </div>
     <p class="prose muted">{d.commandNote}</p>
 
     <h2>{d.toolsTitle}</h2>
@@ -182,28 +187,40 @@ const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[
 </script>
 
 <style>
-  .get { display: grid; gap: var(--s2); justify-items: start; }
+  .get { display: grid; gap: var(--s3); justify-items: start; }
   .get-version { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s1) var(--s2); margin: 0; font-size: var(--t-h3); }
-  .get-one { display: grid; gap: var(--s1); justify-items: start; width: 100%; }
+  .get-one { display: grid; gap: var(--s2); justify-items: start; width: 100%; }
   .get-one[hidden] { display: none; }
-  .get-one > p { margin: 0; overflow-wrap: anywhere; }
-  .get-cmd { display: grid; gap: var(--s1); justify-items: start; width: 100%; margin-top: var(--s2); }
+  .get-one > p { margin: 0; font-size: var(--t-small); overflow-wrap: anywhere; }
+  .get-cmd { display: grid; gap: var(--s1); width: 100%; margin-top: var(--s2); padding-top: var(--s3); border-top: 2px solid var(--line); }
   .get-cmd p { margin: 0; }
-  .get-cmd pre { margin: 0; width: 100%; }
-  .btn--big { font-size: clamp(1.25rem, 2.6vw, 1.75rem); padding: var(--s2) var(--s5); }
-  .btn--small { font-size: var(--t-small); padding: var(--s1) var(--s2); box-shadow: 0 4px 0 var(--navy); }
   .get-links { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); margin: 0; font-weight: 700; }
   .get--none .get-links a:first-child { font-size: var(--t-h3); }
-  .systems { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: var(--s3); }
+
+  /* A command shown whole (it wraps instead of scrolling sideways), with its copy button in
+     the box's corner; on a phone the button goes under it. */
+  .cmd-box { position: relative; width: 100%; }
+  .cmd-box pre { margin: 0; padding-inline-end: 8.5rem; white-space: pre-wrap; overflow-wrap: anywhere; line-height: 1.5; }
+  .cmd-box .btn { position: absolute; inset-block-start: var(--s2); inset-inline-end: var(--s2); }
+  @media (max-width: 48rem) {
+    .cmd-box pre { padding-inline-end: var(--s3); }
+    .cmd-box .btn { position: static; margin-top: var(--s2); }
+  }
+  .cmds { display: grid; gap: var(--s4); }
+  .cmd h3 { display: flex; align-items: center; margin: 0 0 var(--s2); font-size: var(--t-h3); }
+
+  .systems { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 22rem), 1fr)); gap: var(--s4); }
   .system h3 { display: flex; align-items: center; margin: 0; font-size: var(--t-h3); }
   .system > p { margin: var(--s1) 0 var(--s2); }
   .system--yours { background: var(--yellow); }
   .system ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
-  .system li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 var(--s2); align-items: baseline; }
-  .system li a { display: inline-flex; gap: var(--s1); align-items: baseline; font-weight: 700; overflow-wrap: anywhere; }
-  .system details { grid-column: 1 / -1; font-size: var(--t-small); border: 0; padding: 0; margin: 0; background: none; box-shadow: none; }
+  /* Each file is one row to press: icon, what it is, its size. */
+  .file { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: var(--s2); min-block-size: 3rem; padding: var(--s1) var(--s2); border: 2px solid var(--navy); border-radius: var(--r-small); background: var(--white); color: var(--navy); text-decoration: none; font-weight: 700; line-height: 1.25; box-shadow: 0 0.1875rem 0 var(--navy); transition: transform var(--fast) var(--ease), box-shadow var(--fast) var(--ease), background-color var(--fast) var(--ease); }
+  .file:hover { transform: translateY(-0.125rem); box-shadow: 0 0.3125rem 0 var(--navy); background: var(--paper); }
+  .file:active { transform: translateY(0.125rem); box-shadow: 0 0.0625rem 0 var(--navy); }
+  .file:focus-visible { outline-offset: 3px; }
+  .file-size { font-size: var(--t-small); font-weight: 600; color: var(--ink-2); white-space: nowrap; font-variant-numeric: tabular-nums; }
+  .system details { font-size: var(--t-small); border: 0; padding: 0; margin: var(--s1) 0 0 var(--s1); background: none; box-shadow: none; }
   .system summary { font-size: var(--t-small); font-weight: 700; color: var(--ink-2); }
   .system details code { display: block; overflow-wrap: anywhere; color: var(--ink-2); }
-  .cmd { display: grid; gap: var(--s1); justify-items: start; max-width: none; }
-  .cmd pre { margin: 0; width: 100%; }
 </style>
