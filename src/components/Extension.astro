@@ -15,7 +15,11 @@ const e = strings[lang].extension;
     <ul class="bullets prose" data-reveal>{e.features.map((f) => <li>{f}</li>)}</ul>
     <h2>{e.browsersTitle}</h2>
     <dl class="rows" data-reveal>
-      {e.browsers.map((b) => <div><dt><span class="tile tile--sm"><Icon name="globe" /></span>{b.name}</dt><dd>{b.text}</dd></div>)}
+      {e.browsers.map((b) => <div><dt><span class="tile tile--sm"><Icon name="globe" /></span>{b.name}</dt><dd>{b.text}{b.url && <p class="store"><a class="btn btn--white" href={b.url}><Icon name="download" class="drop" />{b.cta}</a></p>}</dd></div>)}
     </dl>
   </div></div>
 </Base>
+
+<style>
+  .store { margin: var(--s2) 0 0; }
+</style>

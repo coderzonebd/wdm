@@ -54,7 +54,7 @@ const nav: [Page, string][] = [
       <div class="wrap">
         <a class="brand" href={href(lang, "home")}>
           <img src={`${base}favicon.svg`} alt="" width="36" height="36" />
-          <span>Whoosh</span>
+          <span>WDM</span>
         </a>
         <button class="menu-toggle" type="button" aria-expanded="false" aria-controls="site-nav">{t.nav.menu}</button>
         <nav class="nav" id="site-nav" aria-label={t.nav.menu}>
@@ -73,7 +73,7 @@ const nav: [Page, string][] = [
     <footer class="site-footer">
       <div class="wrap">
         <div>
-          <div>{t.footer.made}</div>
+          <div>{t.footer.made.split("{company}").map((part, i) => i === 0 ? part : <><a href="https://coderzonebd.com">Coder Zone BD</a>{part}</>)}</div>
           <div>{t.footer.license}</div>
         </div>
         <nav aria-label="Footer">

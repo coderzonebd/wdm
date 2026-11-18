@@ -11,7 +11,8 @@ pnpm build      # → dist/
 
 - Text lives in `src/i18n/en.ts` (source) and `src/i18n/bn.ts`; the TypeScript type keeps them in step.
 - Pages are `src/components/*.astro`; `src/pages/` and `src/pages/bn/` only pick the language.
-- Pushing to `main` publishes to GitHub Pages (`.github/workflows/deploy.yml`).
+- Pushing to `main` publishes to GitHub Pages (`.github/workflows/deploy.yml`), and so does a scheduled build every three hours.
+- The download page lists the files of the app's newest release, read from GitHub when the site is built (`src/lib/release.ts`); the visitor's browser picks the file for their system. `WHOOSH_SAMPLE_RELEASE=1 pnpm dev` shows a sample release.
 
 ## Custom domain
 
