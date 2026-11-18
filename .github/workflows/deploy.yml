@@ -2,7 +2,7 @@
 # so the download page lists the newest release of the app (read from GitHub at build time).
 # Set the repository variable CUSTOM_DOMAIN (e.g. whooshdownloadmanager.app)
 # once the domain's DNS points at GitHub Pages; until then the site is served
-# at https://coderzonebd.github.io/whoosh-website/.
+# at https://coderzonebd.github.io/wdm/.
 name: Deploy
 
 on:

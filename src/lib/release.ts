@@ -76,7 +76,7 @@ async function load(): Promise<Release | undefined> {
     const res = await fetch(API, {
       headers: {
         accept: "application/vnd.github+json",
-        "user-agent": "whoosh-website-build",
+        "user-agent": "wdm-website-build",
         ...(token ? { authorization: `Bearer ${token}` } : {}),
       },
     });
