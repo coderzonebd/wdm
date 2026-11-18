@@ -242,7 +242,7 @@ export const bn: Strings = {
     other: "রিপোজিটরিতে স্টার দেওয়া, বাগ জানানো আর অনুবাদ করাও অনেক সাহায্য।",
   },
   footer: {
-    made: "তৈরি করেছে Coder Zone BD আর অবদানকারীরা।",
+    made: "তৈরি করেছে {company} আর অবদানকারীরা।",
     license: "Apache-2.0 আর GPL-3.0-or-later লাইসেন্সে ওপেন সোর্স।",
     privacy: "গোপনীয়তা",
   },
