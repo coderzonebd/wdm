@@ -7,7 +7,7 @@ import { defineConfig } from "astro/config";
 const domain = process.env.CUSTOM_DOMAIN?.trim();
 export default defineConfig({
   site: domain ? `https://${domain}` : "https://coderzonebd.github.io",
-  base: domain ? "/" : "/whoosh-website",
+  base: domain ? "/" : "/wdm",
   trailingSlash: "always",
   i18n: {
     defaultLocale: "en",
