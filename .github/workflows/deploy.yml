@@ -1,4 +1,5 @@
-# Builds the site and publishes it to GitHub Pages on every push to main.
+# Builds the site and publishes it to GitHub Pages on every push to main, and every three hours
+# so the download page lists the newest release of the app (read from GitHub at build time).
 # Set the repository variable CUSTOM_DOMAIN (e.g. whooshdownloadmanager.app)
 # once the domain's DNS points at GitHub Pages; until then the site is served
 # at https://coderzonebd.github.io/whoosh-website/.
@@ -8,6 +9,8 @@ on:
   push:
     branches: [main]
   workflow_dispatch:
+  schedule:
+    - cron: "17 */3 * * *"
 
 permissions:
   contents: read
@@ -35,6 +38,9 @@ jobs:
       - run: pnpm install --frozen-lockfile
       - run: pnpm check
       - run: pnpm build
+        env:
+          # The download page reads the app's releases; a token lifts the anonymous rate limit.
+          GITHUB_TOKEN: ${{ github.token }}
       - name: Custom domain
         if: env.CUSTOM_DOMAIN != ''
         run: echo "$CUSTOM_DOMAIN" > dist/CNAME

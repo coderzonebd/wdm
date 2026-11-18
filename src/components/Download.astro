@@ -1,30 +1,209 @@
 ---
 // SPDX-License-Identifier: GPL-3.0-or-later
+// The download page. The browser works out the visitor's system and shows its installer first,
+// with that system's one-line install command under it; then every system and file, both
+// install commands, and what to expect on the first start. The file list comes from the newest
+// release, read when the site is built; files come straight from GitHub's release servers.
 import Base from "../layouts/Base.astro";
 import PageHead from "./PageHead.astro";
 import Icon, { type IconName } from "./Icon.astro";
-import { REPO, strings, type Lang } from "../i18n";
+import { REPO, num, strings, type Lang } from "../i18n";
+import { files, latestRelease, size, type Kind } from "../lib/release";
 interface Props { lang: Lang }
 const { lang } = Astro.props;
 const d = strings[lang].download;
-const icons: IconName[] = ["windows", "laptop", "terminal"];
+const release = await latestRelease();
+const got = files(release);
+const icons: Record<string, IconName> = { windows: "windows", mac: "laptop", linux: "terminal", android: "phone" };
+const fill = (text: string, key: string, value: string) => text.replace(`{${key}}`, value);
+const osNames = d.osNames as Record<string, string>;
+const [unixCmd, windowsCmd] = d.commands;
+
+/** The visitor's system → the file of the big button, and its install command. */
+const primary: { os: string; kind: Kind; cmd?: { name: string; code: string } }[] = [
+  { os: "windows", kind: "win-x64", cmd: windowsCmd },
+  { os: "windows-arm", kind: "win-arm64", cmd: windowsCmd },
+  { os: "mac", kind: "mac", cmd: unixCmd },
+  { os: "linux", kind: "deb-x64", cmd: unixCmd },
+  { os: "linux-arm", kind: "deb-arm64", cmd: unixCmd },
+  { os: "android", kind: "android" },
+];
 ---
 <Base lang={lang} page="download" title={d.title}>
   <PageHead title={d.title} lead={d.lead} />
   <div class="page-body"><div class="wrap">
-    <h2>{d.platformsTitle}</h2>
-    <dl class="rows" data-reveal>
-      {d.platforms.map((p, i) => <div><dt><span class="tile tile--sm"><Icon name={icons[i] ?? "download"} /></span>{p.name}</dt><dd>{p.items.join(", ")}</dd></div>)}
+    {release ? (
+      <section class="get panel">
+        <p class="get-version">
+          {release.prerelease && <span class="pill pill--yellow">{d.beta}</span>}
+          <strong>{num(lang, fill(d.version, "v", release.version))}</strong>
+          {release.date && <span class="muted">{num(lang, fill(d.released, "date", release.date))}</span>}
+        </p>
+        {primary.filter((p) => got[p.kind]).map((p) => {
+          const a = got[p.kind]!;
+          return (
+            <div class="get-one" data-os={p.os} hidden>
+              <a class="btn btn--big" href={a.url}><Icon name="download" class="drop" />{fill(d.forYou, "os", osNames[p.os] ?? p.os)}</a>
+              <p class="muted">{d.picked} {a.name} · {num(lang, size(a.size))}</p>
+              {p.cmd && (
+                <div class="get-cmd">
+                  <p><strong>{d.orCommand}</strong> ({p.cmd.name})</p>
+                  <pre><code>{p.cmd.code}</code></pre>
+                  <button class="btn btn--white btn--small" type="button" data-copy={p.cmd.code} data-done={d.copied}><Icon name="copy" /><span>{d.copy}</span></button>
+                </div>
+              )}
+            </div>
+          );
+        })}
+        <p class="get-links">
+          <a href="#all">{d.otherSystems}</a>
+          <a href={release.url}>{d.releasesPage}</a>
+          {release.sums && <a href={release.sums}>{d.checksums}</a>}
+        </p>
+      </section>
+    ) : (
+      <section class="get panel">
+        <p>{d.unavailable}</p>
+        <a class="btn" href={`${REPO}/releases`}><Icon name="download" class="drop" />{d.releasesPage}</a>
+      </section>
+    )}
+
+    {release && (
+      <>
+        <h2 id="all">{d.otherSystems}</h2>
+        <div class="systems">
+          {d.platforms.map((p) => {
+            const list = p.files.filter((f) => got[f.kind as Kind]);
+            if (list.length === 0) return null;
+            return (
+              <article class="system panel" data-system={p.id}>
+                <h3><span class="tile tile--sm"><Icon name={icons[p.id] ?? "download"} /></span>{p.name}</h3>
+                <p class="muted">{p.note}</p>
+                <ul>
+                  {list.map((f) => {
+                    const a = got[f.kind as Kind]!;
+                    return (
+                      <li>
+                        <a href={a.url}><Icon name="download" />{f.label}</a>
+                        <span class="muted">{num(lang, size(a.size))}</span>
+                        {a.sha256 && <details><summary>{d.sha}</summary><code>{a.sha256}</code></details>}
+                      </li>
+                    );
+                  })}
+                </ul>
+              </article>
+            );
+          })}
+        </div>
+      </>
+    )}
+
+    <h2>{d.commandTitle}</h2>
+    <p class="prose muted">{d.commandText}</p>
+    <dl class="rows">
+      {d.commands.map((c) => (
+        <div>
+          <dt>{c.name}</dt>
+          <dd class="cmd"><pre><code>{c.code}</code></pre><button class="btn btn--white btn--small" type="button" data-copy={c.code} data-done={d.copied}><Icon name="copy" /><span>{d.copy}</span></button></dd>
+        </div>
+      ))}
     </dl>
+    <p class="prose muted">{d.commandNote}</p>
+
+    <h2>{d.toolsTitle}</h2>
+    <p class="prose muted">{d.toolsText}</p>
+
+    <h2>{d.updatesTitle}</h2>
+    <p class="prose muted">{d.updatesText}</p>
+
     <h2>{d.signingTitle}</h2>
-    <dl class="rows" data-reveal>
+    <dl class="rows">
       <div><dt><span class="tile tile--sm"><Icon name="windows" /></span>Windows</dt><dd>{d.signingWindows}</dd></div>
       <div><dt><span class="tile tile--sm"><Icon name="laptop" /></span>macOS</dt><dd>{d.signingMac}</dd></div>
+      <div><dt><span class="tile tile--sm"><Icon name="phone" /></span>Android</dt><dd>{d.signingAndroid}</dd></div>
     </dl>
+
     <h2>{d.verifyTitle}</h2>
     <p class="prose muted">{d.verifyText}</p>
     <pre><code>{d.verifyCode}</code></pre>
+
     <h2>{d.sourceTitle}</h2>
     <p class="prose muted">{d.sourceText} <a href={`${REPO}#quick-start`}>GitHub</a></p>
   </div></div>
 </Base>
+
+<script>
+  // Which system is this? Only the user agent (and, in Chromium, the processor type) is read;
+  // nothing is stored or sent anywhere.
+  type UAData = { getHighEntropyValues(hints: string[]): Promise<{ architecture?: string }> };
+  async function isArm(): Promise<boolean> {
+    const data = (navigator as Navigator & { userAgentData?: UAData }).userAgentData;
+    try {
+      return (await data?.getHighEntropyValues(["architecture"]))?.architecture === "arm";
+    } catch {
+      return false;
+    }
+  }
+  async function system(): Promise<string> {
+    const ua = navigator.userAgent;
+    if (/Android/i.test(ua)) return "android";
+    if (/Windows/i.test(ua)) return (await isArm()) ? "windows-arm" : "windows";
+    if (/Macintosh|Mac OS X/i.test(ua) && !/iPhone|iPad/i.test(ua)) return "mac";
+    if (/Linux|X11|CrOS/i.test(ua)) return (await isArm()) || /aarch64|arm64/i.test(ua) ? "linux-arm" : "linux";
+    return "";
+  }
+
+  system().then((os) => {
+    const one = os ? document.querySelector<HTMLElement>(`.get-one[data-os="${os}"]`) : null;
+    // No match (an unknown system, or no file for it): the list of every system is the choice.
+    if (one) one.hidden = false;
+    else document.querySelector(".get")?.classList.add("get--none");
+    const family = os.replace(/-arm$/, "");
+    const card = family ? document.querySelector<HTMLElement>(`.system[data-system="${family}"]`) : null;
+    if (card) {
+      card.classList.add("system--yours");
+      card.parentElement?.prepend(card);
+    }
+  });
+
+  for (const b of document.querySelectorAll<HTMLButtonElement>("[data-copy]")) {
+    b.addEventListener("click", async () => {
+      const label = b.querySelector("span");
+      try {
+        await navigator.clipboard.writeText(b.dataset.copy ?? "");
+        const was = label?.textContent ?? "";
+        if (label) label.textContent = b.dataset.done ?? "";
+        setTimeout(() => { if (label) label.textContent = was; }, 1500);
+      } catch {
+        // No clipboard (an old browser, a page not in focus): the command stays selectable.
+      }
+    });
+  }
+</script>
+
+<style>
+  .get { display: grid; gap: var(--s2); justify-items: start; }
+  .get-version { display: flex; flex-wrap: wrap; align-items: center; gap: var(--s1) var(--s2); margin: 0; font-size: var(--t-h3); }
+  .get-one { display: grid; gap: var(--s1); justify-items: start; width: 100%; }
+  .get-one[hidden] { display: none; }
+  .get-one > p { margin: 0; overflow-wrap: anywhere; }
+  .get-cmd { display: grid; gap: var(--s1); justify-items: start; width: 100%; margin-top: var(--s2); }
+  .get-cmd p { margin: 0; }
+  .get-cmd pre { margin: 0; width: 100%; }
+  .btn--big { font-size: clamp(1.25rem, 2.6vw, 1.75rem); padding: var(--s2) var(--s5); }
+  .btn--small { font-size: var(--t-small); padding: var(--s1) var(--s2); box-shadow: 0 4px 0 var(--navy); }
+  .get-links { display: flex; flex-wrap: wrap; gap: var(--s1) var(--s3); margin: 0; font-weight: 700; }
+  .get--none .get-links a:first-child { font-size: var(--t-h3); }
+  .systems { display: grid; grid-template-columns: repeat(auto-fit, minmax(min(100%, 17rem), 1fr)); gap: var(--s3); }
+  .system h3 { display: flex; align-items: center; margin: 0; font-size: var(--t-h3); }
+  .system > p { margin: var(--s1) 0 var(--s2); }
+  .system--yours { background: var(--yellow); }
+  .system ul { list-style: none; margin: 0; padding: 0; display: grid; gap: var(--s2); }
+  .system li { display: grid; grid-template-columns: minmax(0, 1fr) auto; gap: 0 var(--s2); align-items: baseline; }
+  .system li a { display: inline-flex; gap: var(--s1); align-items: baseline; font-weight: 700; overflow-wrap: anywhere; }
+  .system details { grid-column: 1 / -1; font-size: var(--t-small); border: 0; padding: 0; margin: 0; background: none; box-shadow: none; }
+  .system summary { font-size: var(--t-small); font-weight: 700; color: var(--ink-2); }
+  .system details code { display: block; overflow-wrap: anywhere; color: var(--ink-2); }
+  .cmd { display: grid; gap: var(--s1); justify-items: start; max-width: none; }
+  .cmd pre { margin: 0; width: 100%; }
+</style>
