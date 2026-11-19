@@ -208,10 +208,26 @@ export const en = {
       "Competitors: curl, wget, aria2c, aria2-next, Mister DM, Surge, Gopeed.",
     ],
     dataLink: "Raw data and reports on GitHub",
+    idm: {
+      title: "Against Internet Download Manager",
+      lead: "IDM only runs on Windows, so it gets its own run: the same test server on a GitHub Windows machine, IDM 6.43 running in the background as people use it, against WDM and curl. Six tests, 5 runs each, repeated four times. Time from the command to the file safely on disk, the middle result; shorter is faster.",
+      head: ["", "WDM", "IDM 6.43 (its best run)", "curl"],
+      rows: [
+        ["1 GiB, fast server", "6.2–7.6 s", "12.4 s", "7.2–9.7 s"],
+        ["Server that keeps dropping the line, 100 MiB", "0.59–0.68 s", "0.92 s", "fails"],
+        ["Server that stalls, 100 MiB", "0.60–0.66 s", "3.9 s", "8.7–9.2 s"],
+        ["Server that drips data slowly, 10 MiB", "0.62–0.72 s", "5.0 s", "6.7–8.4 s"],
+        ["Server that slows each connection, 10 MiB", "0.45–0.47 s", "1.48 s", "5.23 s"],
+        ["Distant server (high latency), 10 MiB", "0.60–0.62 s", "3.8 s", "0.67–0.73 s"],
+      ],
+      note: "Ranges are WDM's and curl's results across the four runs; for IDM we show its best run. Every WDM and IDM download was byte-exact. These ran on one shared virtual machine with the server on the same machine; tests over the real internet are next. “Internet Download Manager” and “IDM” are trademarks of Tonec Inc.; WDM is not affiliated with them.",
+      dataLink: "IDM run data and reports",
+    },
   },
   faq: {
     title: "Questions",
     items: [
+      { q: "Is WDM faster than IDM?", a: "In our public test on Windows, yes: WDM finished first in all six tests, from a 1 GiB file on a fast server to servers that stall, drop the line or drip data. The results, the raw data and how IDM was run are on the speed tests page. Those tests ran on one machine; on the real internet your connection is usually the limit for both." },
       { q: "Is WDM free?", a: "Yes. It is open source: the engine and libraries are Apache-2.0, and the apps are GPL-3.0-or-later. There are no ads and no paid tier." },
       { q: "When can I use it?", a: "Now: the first public beta is out for Windows, macOS, Linux and Android, and the extension is on Firefox Add-ons and Edge Add-ons. Beta means it is ready to use and we are still polishing; it updates itself to each new version." },
       { q: "Which systems does it run on?", a: "Windows 10 and 11 (x64 and ARM64), macOS 12 or later (Apple silicon and Intel), Linux (x64 and ARM64), and Android 11 or later on 64-bit ARM phones. iOS is planned later." },
